@@ -1,0 +1,55 @@
+= Overview
+
+== About Granicus Platform API
+
+Granicus is a platform for government transparency and citizen engagement in use by over 900 government organizations, from small towns to the US Congress.  This Ruby wrapper allows for integration with the SOAP web service that can be used to automate backend tasks in the system.
+
+== Usage
+
+First:
+
+<tt>gem install granicus-platform-api</tt>
+
+Then create a client:
+
+<tt>granicus = GranicusPlatformAPI::Client.new(<customer site>,<username>,<password>)</tt>
+
+Granicus site is, for instance, sanfrancisco.granicus.com. Username and password must be a valid username/password for the site. This API is not for public access. If you wish to gain access to an API for public access, join the Granicus Developers Google Group.
+
+Once you have initialized your client, you can make calls to the documented API methods. The only difference is that you will use snake_case methods and properties rather than CamelCase ones. For example:
+
+<tt>clips = granicus.get_clips</tt>
+
+== Compatibility
+
+This wrapper is developed against 1.9.2.
+
+= License
+
+Copyright (c) 2011 Javier Muniz
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+You will notify the author and give permission to have your software
+listed on this and other websites of the author as using the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+= Credits
+
+Javier Muniz
