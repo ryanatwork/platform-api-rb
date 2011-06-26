@@ -56,6 +56,18 @@ module GranicusPlatformAPI
       end
       typecast_value_node doc.xpath('//ns5:GetCamerasResponse/cameras', doc.root.namespaces)[0]
     end
+    
+    # return the requested event
+    def get_camera(camera_id)
+      response = @client.request :wsdl, :get_camera do
+        soap.body = { :camera_id => camera_id, :attributes! => {:camera_id => {"xsi:type" => "xsd:int"}} }
+      end
+
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns5:GetCameraResponse/camera', doc.root.namespaces)[0]
+    end
 
     # return all of the events
     def get_events
@@ -65,6 +77,18 @@ module GranicusPlatformAPI
         config.noblanks
       end
       typecast_value_node doc.xpath('//ns5:GetEventsResponse/events', doc.root.namespaces)[0]
+    end
+    
+    # return the requested event
+    def get_event(event_id)
+      response = @client.request :wsdl, :get_event do
+        soap.body = { :event_id => event_id, :attributes! => {:event_id => {"xsi:type" => "xsd:int"}} }
+      end
+
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns5:GetEventResponse/event', doc.root.namespaces)[0]
     end
 
     # return all of the event meta data
@@ -77,6 +101,18 @@ module GranicusPlatformAPI
         config.noblanks
       end
       typecast_value_node doc.xpath('//ns5:GetEventMetaDataResponse/metadata', doc.root.namespaces)[0]
+    end
+    
+    # return all of the clip meta data
+    def get_clip_meta_data(clip_id)
+      response = @client.request :wsdl, :get_clip_meta_data do
+        soap.body = { :clip_id => clip_id, :attributes! => {:clip_id => {"xsi:type" => "xsd:int"}} }
+      end
+
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns5:GetClipMetaDataResponse/metadata', doc.root.namespaces)[0]
     end
 
     # return all of the folders
@@ -99,6 +135,46 @@ module GranicusPlatformAPI
         config.noblanks
       end
       typecast_value_node doc.xpath('//ns5:GetClipsResponse/clips', doc.root.namespaces)[0]
+    end
+    
+    # return all of the clips with matching foreign id
+    def get_clips_by_foreign_id(foreign_id)
+      response = @client.request :wsdl, :get_clips_by_foreign_id do
+        soap.body = { :foreign_id => foreign_id, :attributes! => {:foreign_id => {"xsi:type" => "xsd:int"}} }
+      end
+
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns5:GetClipsByForeignIDResponse/clips', doc.root.namespaces)[0]
+    end
+
+    def get_servers
+      response = @client.request :wsdl, :get_servers
+    end
+    
+    # return the requested clip
+    def get_clip(clip_id)
+      response = @client.request :wsdl, :get_clip do
+        soap.body = { :clip_id => clip_id, :attributes! => {:clip_id => {"xsi:type" => "xsd:int"}} }
+      end
+
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns5:GetClipResponse/clip', doc.root.namespaces)[0]
+    end
+    
+    # return the requested clip
+    def get_clip_by_uid(clip_uid)
+      response = @client.request :wsdl, :get_clip_by_uid do
+        soap.body = { :clip_uid => clip_uid, :attributes! => {:clip_uid => {"xsi:type" => "xsd:string"}} }
+      end
+
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns5:GetClipByUIDResponse/clip', doc.root.namespaces)[0]
     end
 
     def get_servers
