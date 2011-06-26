@@ -23,204 +23,119 @@ module GranicusPlatformAPI
       end
 
       # call login
-      @client.request :wsdl, :login do
-        soap.body = { :username => username, :password => password }
-      end
-
+      call_soap_method(:login,'//ns4:LoginResponse/return',{:username => username, :password => password})
     end
 
     # return the current logged on user name
     def get_current_user_logon
-      response = @client.request :wsdl, :get_current_user_logon
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns4:GetCurrentUserLogonResponse/Logon', doc.root.namespaces)[0]
+      call_soap_method(:get_current_user_logon,'//ns4:GetCurrentUserLogonResponse/Logon')
     end
 
     # logout
     def logout
-      response = @client.request :wsdl, :logout
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns4:LogoutResponse', doc.root.namespaces)[0]
+      call_soap_method(:logout,'//ns4:LogoutResponse')
     end
 
     # return all of the cameras
     def get_cameras
-      response = @client.request :wsdl, :get_cameras
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetCamerasResponse/cameras', doc.root.namespaces)[0]
+      call_soap_method(:get_cameras,'//ns5:GetCamerasResponse/cameras')
     end
     
     # return the requested event
     def get_camera(camera_id)
-      response = @client.request :wsdl, :get_camera do
-        soap.body = { :camera_id => camera_id, :attributes! => {:camera_id => {"xsi:type" => "xsd:int"}} }
-      end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetCameraResponse/camera', doc.root.namespaces)[0]
+      call_soap_method(:get_camera,'//ns5:GetCameraResponse/camera',{ :camera_id => camera_id })
     end
 
     # return all of the events
     def get_events
-      response = @client.request :wsdl, :get_events
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetEventsResponse/events', doc.root.namespaces)[0]
+      call_soap_method(:get_events,'//ns5:GetEventsResponse/events')
     end
     
     # return all of the events with matching foreign id
     def get_events_by_foreign_id(foreign_id)
-      response = @client.request :wsdl, :get_events_by_foreign_id do
-        soap.body = { :foreign_id => foreign_id, :attributes! => {:foreign_id => {"xsi:type" => "xsd:int"}} }
-      end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetEventsByForeignIDResponse/events', doc.root.namespaces)[0]
+      call_soap_method(:get_events_by_foreign_id,'//ns5:GetEventsByForeignIDResponse/events',{ :foreign_id => foreign_id })
     end
     
     # return the requested event
     def get_event(event_id)
-      response = @client.request :wsdl, :get_event do
-        soap.body = { :event_id => event_id, :attributes! => {:event_id => {"xsi:type" => "xsd:int"}} }
-      end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetEventResponse/event', doc.root.namespaces)[0]
+      call_soap_method(:get_event,'//ns5:GetEventResponse/event',{ :event_id => event_id })
     end
 
     # return all of the event meta data
     def get_event_meta_data(event_id)
-      response = @client.request :wsdl, :get_event_meta_data do
-        soap.body = { :event_id => event_id, :attributes! => {:event_id => {"xsi:type" => "xsd:int"}} }
-      end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetEventMetaDataResponse/metadata', doc.root.namespaces)[0]
+      call_soap_method(:get_event_meta_data,'//ns5:GetEventMetaDataResponse/metadata',{ :event_id => event_id })
     end
     
     # set the event agenda url
     def set_event_agenda_url(event_id,url)
-      response = @client.request :wsdl, :set_event_agenda_url do
-        soap.body = { :event_id => event_id, 
-                      :url => url, 
-                      :attributes! => {:event_id => {"xsi:type" => "xsd:int"}, :url => {"xsi:type" => "xsd:string"}} }
-      end
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns4:SetEventAgendaURLResponse', doc.root.namespaces)[0]
+      call_soap_method(:set_event_agenda_url,'//ns4:SetEventAgendaURLResponse',{ :event_id => event_id,  :url => url })
     end
     
     # return all of the clip meta data
     def get_clip_meta_data(clip_id)
-      response = @client.request :wsdl, :get_clip_meta_data do
-        soap.body = { :clip_id => clip_id, :attributes! => {:clip_id => {"xsi:type" => "xsd:int"}} }
-      end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetClipMetaDataResponse/metadata', doc.root.namespaces)[0]
+      call_soap_method(:get_clip_meta_data,'//ns5:GetClipMetaDataResponse/metadata',{ :clip_id => clip_id })
     end
 
     # return all of the folders
     def get_folders
-      response = @client.request :wsdl, :get_folders
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetFoldersResponse/folders', doc.root.namespaces)[0]
+      call_soap_method(:get_folders,'//ns5:GetFoldersResponse/folders')
     end
 
     # return all of the clips
     def get_clips(folder_id)
-      response = @client.request :wsdl, :get_clips do
-        soap.body = { :folder_id => folder_id, :attributes! => {:folder_id => {"xsi:type" => "xsd:int"}} }
-      end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetClipsResponse/clips', doc.root.namespaces)[0]
+      call_soap_method(:get_clips,'//ns5:GetClipsResponse/clips',{ :folder_id => folder_id })
     end
     
     # return all of the clips with matching foreign id
     def get_clips_by_foreign_id(foreign_id)
-      response = @client.request :wsdl, :get_clips_by_foreign_id do
-        soap.body = { :foreign_id => foreign_id, :attributes! => {:foreign_id => {"xsi:type" => "xsd:int"}} }
-      end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetClipsByForeignIDResponse/clips', doc.root.namespaces)[0]
+      call_soap_method(:get_clips_by_foreign_id,'//ns5:GetClipsByForeignIDResponse/clips',{ :foreign_id => foreign_id })
     end
     
     # return the requested clip
     def get_clip(clip_id)
-      response = @client.request :wsdl, :get_clip do
-        soap.body = { :clip_id => clip_id, :attributes! => {:clip_id => {"xsi:type" => "xsd:int"}} }
-      end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetClipResponse/clip', doc.root.namespaces)[0]
+      call_soap_method(:get_clip,'//ns5:GetClipResponse/clip',{ :clip_id => clip_id })
     end
     
     # return the requested clip
     def get_clip_by_uid(clip_uid)
-      response = @client.request :wsdl, :get_clip_by_uid do
-        soap.body = { :clip_uid => clip_uid, :attributes! => {:clip_uid => {"xsi:type" => "xsd:string"}} }
-      end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetClipByUIDResponse/clip', doc.root.namespaces)[0]
+      call_soap_method(:get_clipd_by_uid,'//ns5:GetClipByUIDResponse/clip',{ :clip_uid => clip_uid })
     end
 
     # get servers
     def get_servers
-      response = @client.request :wsdl, :get_servers
-      
-      doc = Nokogiri::XML(response.to_xml) do |config|
-        config.noblanks
-      end
-      typecast_value_node doc.xpath('//ns5:GetServersResponse/servers', doc.root.namespaces)[0]
+      call_soap_method(:get_servers,'//ns5:GetServersResponse/servers')
     end
     
     # return the requested server
     def get_server(server_id)
-      response = @client.request :wsdl, :get_server do
-        soap.body = { :server_id => server_id, :attributes! => {:server_id => {"xsi:type" => "xsd:int"}} }
+      call_soap_method(:get_server,'//ns5:GetServerResponse/server',{ :server_id => server_id })
+    end
+
+    private
+    
+    def call_soap_method(method,returnfilter,args={})
+      response = @client.request :wsdl, method do
+        soap.body = with_attributes args
       end
 
       doc = Nokogiri::XML(response.to_xml) do |config|
         config.noblanks
       end
-      typecast_value_node doc.xpath('//ns5:GetServerResponse/server', doc.root.namespaces)[0]
+      typecast_value_node doc.xpath(returnfilter, doc.root.namespaces)[0]
     end
-
-    private
+    
+    def with_attributes(hash={})
+      attributes = {}
+      hash.each do |key,value|
+        xsd_type = self.class.classmap[value.class.to_s]
+        if xsd_type.nil? 
+          puts "Couldn't get xsd:type for #{value.class}"
+        else
+          attributes[key] = {"xsi:type" => xsd_type }
+        end
+      end
+      hash.merge({ :attributes! => attributes })
+    end
 
     def typecast_value_node(node, parent=nil)
       if node.is_a? Nokogiri::XML::NodeSet or node.is_a? Array then
@@ -265,14 +180,6 @@ module GranicusPlatformAPI
       @@typecasts = obj
     end
 
-    def self.available_typecasts
-      @@available_typecasts
-    end
-
-    def self.available_typecasts=(obj)
-      @@available_typecasts = obj
-    end
-
     self.typecasts = {}
     self.typecasts["int"] = lambda { |v| v.nil? ? nil : v.to_i }
     self.typecasts["boolean"] = lambda { |v| v.nil? ? nil : (v.strip != "false") }
@@ -285,9 +192,19 @@ module GranicusPlatformAPI
     self.typecasts["symbol"] = lambda { |v| v.nil? ? nil : v.to_sym }
     self.typecasts["string"] = lambda { |v| v.to_s }
     self.typecasts["yaml"] = lambda { |v| v.nil? ? nil : YAML.load(v) }
-    self.typecasts["base64Binary"] = lambda { |v| v.unpack('m').first }
-
-    self.available_typecasts = self.typecasts.keys
+    self.typecasts["base64Binary"] = lambda { |v| v.unpack('m').first }    
     
+    # classmap for generating proper attributes! hash within savon calls
+    def self.classmap
+      @@classmap
+    end
+
+    def self.classmap=(obj)
+      @@classmap = obj
+    end
+
+    self.classmap = {}
+    self.classmap['Fixnum'] = "xsd:int"
+    self.classmap['String'] = "xsd:string"
   end
 end
