@@ -222,7 +222,7 @@ module GranicusPlatformAPI
 
     private
 
-    def typecast_value_node(node)
+    def typecast_value_node(node, parent=nil)
       if node.is_a? Nokogiri::XML::NodeSet or node.is_a? Array then
         return node.map {|el| typecast_value_node el } 
       end
@@ -248,8 +248,10 @@ module GranicusPlatformAPI
         # we have a custom type, make it hashie since we don't want true static typing
         value = ::Hashie::Mash.new
         node.children.each do |value_node|
-          value[value_node.name.snakecase] = typecast_value_node value_node
+          value[value_node.name.snakecase] = typecast_value_node value_node, value
         end
+        # add the type of the complex type to the parent as 'nodename_object_type', this is for handling metadata
+        parent[node.name.snakecase + '_object_type'] = type.snakecase unless parent.nil?
         value
       end
     end
