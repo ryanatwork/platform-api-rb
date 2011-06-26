@@ -5,13 +5,15 @@ GRANICUS_LOGIN = ENV['USERNAME']
 GRANICUS_PASSWORD = ENV['PASSWORD']
 CAMERA_ID = 3
 FOLDER_ID = 7
-SERVER_ID = 1
 EVENT_ID = 30
 EVENT_META_ID = 1775
 CLIP_ID = 246
 CLIP_UID = '00000000-0000-0000-0000-000000000000'
+EVENT_UID = '00000000-0000-0000-0000-000000000000'
 CLIP_META_ID = 574
-FOREIGN_ID = 1
+CLIP_FOREIGN_ID = 1
+EVENT_FOREIGN_ID = 1
+SERVER_ID = 2
 
 client = GranicusPlatformAPI::Client.new GRANICUS_SITE, GRANICUS_LOGIN, GRANICUS_PASSWORD 
 
@@ -46,10 +48,32 @@ describe GranicusPlatformAPI, "::Client.get_events" do
   end
 end
 
+describe GranicusPlatformAPI, "::Client.get_events_by_foreign_id" do
+  it "should get all events with matching foreign id" do
+    events = client.get_events_by_foreign_id EVENT_FOREIGN_ID
+    events.each do |event|
+      event.foreign_id.should == EVENT_FOREIGN_ID
+    end
+  end
+end
+
 describe GranicusPlatformAPI, "::Client.get_event" do
   it "should get the requested event" do
     event = client.get_event EVENT_ID
     event.id.should == EVENT_ID
+  end
+end
+
+describe GranicusPlatformAPI, "::Client.get_event_by_uid" do
+  it "should get the requested event" do
+    event = client.get_event_by_uid EVENT_UID
+    event.id.should == EVENT_UID
+  end
+end
+
+describe GranicusPlatformAPI, "::Client.set_event_agenda_url" do
+  it "not return an error" do
+    event = client.set_event_agenda_url EVENT_ID, "http://github.com/gov20cto/granicus-platform-api"
   end
 end
 
@@ -71,9 +95,9 @@ end
 
 describe GranicusPlatformAPI, "::Client.get_clips_by_foreign_id" do
   it "should get all clips with matching foreign id" do
-    clips = client.get_clips_by_foreign_id FOREIGN_ID
+    clips = client.get_clips_by_foreign_id CLIP_FOREIGN_ID
     clips.each do |clip|
-      clip.foreign_id.should == FOREIGN_ID
+      clip.foreign_id.should == CLIP_FOREIGN_ID
     end
   end
 end
@@ -109,10 +133,17 @@ describe GranicusPlatformAPI, "::Client.get_clip_meta_data" do
 end
 
 describe GranicusPlatformAPI, "::Client.get_servers" do
-  it "should get my servers" do
+  it "should get all servers" do
     servers = client.get_servers
-    puts servers
-    servers[0].id.should == SERVER_ID
+    found = servers.find {|s| s.id == SERVER_ID } 
+    found.should_not == nil
+  end
+end
+
+describe GranicusPlatformAPI, "::Client.get_server" do
+  it "should get the requested server" do
+    server = client.get_server SERVER_ID
+    server.id.should == SERVER_D
   end
 end
 

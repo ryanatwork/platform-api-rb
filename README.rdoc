@@ -4,6 +4,10 @@
 
 Granicus is a platform for government transparency and citizen engagement in use by over 900 government organizations, from small towns to the US Congress.  This Ruby wrapper allows for integration with the SOAP web service that can be used to automate backend tasks in the system.
 
+== WARNING
+
+This gem is still under heavy development, and is not recommended for production use. Contributions and suggestions are welcome.
+
 == Usage
 
 First:

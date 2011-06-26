@@ -79,6 +79,18 @@ module GranicusPlatformAPI
       typecast_value_node doc.xpath('//ns5:GetEventsResponse/events', doc.root.namespaces)[0]
     end
     
+    # return all of the events with matching foreign id
+    def get_events_by_foreign_id(foreign_id)
+      response = @client.request :wsdl, :get_events_by_foreign_id do
+        soap.body = { :foreign_id => foreign_id, :attributes! => {:foreign_id => {"xsi:type" => "xsd:int"}} }
+      end
+
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns5:GetEventsByForeignIDResponse/events', doc.root.namespaces)[0]
+    end
+    
     # return the requested event
     def get_event(event_id)
       response = @client.request :wsdl, :get_event do
@@ -101,6 +113,19 @@ module GranicusPlatformAPI
         config.noblanks
       end
       typecast_value_node doc.xpath('//ns5:GetEventMetaDataResponse/metadata', doc.root.namespaces)[0]
+    end
+    
+    # set the event agenda url
+    def set_event_agenda_url(event_id,url)
+      response = @client.request :wsdl, :set_event_agenda_url do
+        soap.body = { :event_id => event_id, 
+                      :url => url, 
+                      :attributes! => {:event_id => {"xsi:type" => "xsd:int"}, :url => {"xsi:type" => "xsd:string"}} }
+      end
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns4:SetEventAgendaURLResponse', doc.root.namespaces)[0]
     end
     
     # return all of the clip meta data
@@ -148,10 +173,6 @@ module GranicusPlatformAPI
       end
       typecast_value_node doc.xpath('//ns5:GetClipsByForeignIDResponse/clips', doc.root.namespaces)[0]
     end
-
-    def get_servers
-      response = @client.request :wsdl, :get_servers
-    end
     
     # return the requested clip
     def get_clip(clip_id)
@@ -177,8 +198,26 @@ module GranicusPlatformAPI
       typecast_value_node doc.xpath('//ns5:GetClipByUIDResponse/clip', doc.root.namespaces)[0]
     end
 
+    # get servers
     def get_servers
       response = @client.request :wsdl, :get_servers
+      
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns5:GetServersResponse/servers', doc.root.namespaces)[0]
+    end
+    
+    # return the requested server
+    def get_server(server_id)
+      response = @client.request :wsdl, :get_server do
+        soap.body = { :server_id => server_id, :attributes! => {:server_id => {"xsi:type" => "xsd:int"}} }
+      end
+
+      doc = Nokogiri::XML(response.to_xml) do |config|
+        config.noblanks
+      end
+      typecast_value_node doc.xpath('//ns5:GetServerResponse/server', doc.root.namespaces)[0]
     end
 
     private
