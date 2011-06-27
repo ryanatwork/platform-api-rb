@@ -120,6 +120,7 @@ module GranicusPlatformAPI
     def call_soap_method(method,returnfilter,args={},debug=false)
       response = @client.request :wsdl, method do
         soap.namespaces['xmlns:granicus'] = "http://granicus.com/xsd"
+        soap.namespaces['xmlns:SOAP-ENC'] = "http://schemas.xmlsoap.org/soap/encoding/"
         soap.body = prepare_request args
         if debug then
           puts soap.body
@@ -137,16 +138,16 @@ module GranicusPlatformAPI
     end
     
     def prepare_request(hash={})
+      puts "preparing hash: #{hash}"
       attributes = {}
       hash.each do |key,value|
         case value.class.to_s
-        when 'Hashie::Mash', 'Hash'
-          next if key.to_s.end_with? '_object_type'
+        when 'Hashie::Mash', /GranicusPlatformAPI::/, 'Hash'
           hash[key] = prepare_request value
         when 'Array'
           hash[key] = prepare_array value
         end
-        attributes[key] = attribute_of value,hash,key
+        attributes[key] = attribute_of value
       end
       hash.merge!({ :attributes! => attributes })
     end
@@ -154,29 +155,27 @@ module GranicusPlatformAPI
     def prepare_array(array)
       array.each_index do |index|
         case array[index].class.to_s
-        when 'Hashie::Mash', 'Hash'
+        when 'Hashie::Mash', /GranicusPlatformAPI::/, 'Hash'
           array[index] = prepare_request array[index]
         end
       end
       { "item" => array, :attributes! => { "item" => attribute_of(array[0]) } }
     end
     
-    def attribute_of(value,hash={},key=nil) 
+    def attribute_of(value) 
       case value.class.to_s
       when 'Hashie::Mash','Hash'
-        if key.nil?
-          nil
-        else
-          unless hash[key.to_s+'_object_type'].nil?
-            {"xsi:type" => "granicus:#{hash[key+'_object_type']}"}
-          else
-            nil
-          end
-        end
+        nil
       when 'Array'
-        {"xsi:type" => 'SOAP-ENC:Array'}
+        xsd_type = self.class.classmap[value[0].class.to_s.split('::').last]
+        if xsd_type.nil? 
+          puts "Couldn't get xsd:type for #{value.class}"
+          {"xsi:type" => 'SOAP-ENC:Array'}
+        else
+          {"xsi:type" => 'SOAP-ENC:Array', "SOAP-ENC:arrayType" => "#{xsd_type}[#{value.count}]"}
+        end
       else
-        xsd_type = self.class.classmap[value.class.to_s]
+        xsd_type = self.class.classmap[value.class.to_s.split('::').last]
         if xsd_type.nil? 
           puts "Couldn't get xsd:type for #{value.class}"
           nil
@@ -186,7 +185,7 @@ module GranicusPlatformAPI
       end
     end
 
-    def handle_response(node, parent=nil)
+    def handle_response(node)
       if node.is_a? Nokogiri::XML::NodeSet or node.is_a? Array then
         return node.map {|el| handle_response el } 
       end
@@ -210,15 +209,35 @@ module GranicusPlatformAPI
         end
       else
         # we have a custom type, make it hashie since we don't want true static typing
-        value = ::Hashie::Mash.new
-        node.children.each do |value_node|
-          value[value_node.name] = handle_response value_node, value
+        proc = self.class.typegenerators[type]
+        value = {}
+        unless proc.nil?
+          value = proc.call
+        else
+          puts "Unknown custom type: #{type}"
+          value = ::Hashie::Mash.new
         end
-        # add the type of the complex type to the parent as 'nodename_object_type', this is for handling metadata
-        parent[node.name + '_object_type'] = type unless parent.nil?
+        node.children.each do |value_node|
+          value[value_node.name] = handle_response value_node
+        end
         value
       end
     end
+    
+    # typecasts ripped from rubiii/nori, adapted for xsd types
+    def self.typegenerators
+      @@typegenerators
+    end
+
+    def self.typegenerators=(obj)
+      @@typegenerators = obj
+    end
+
+    self.typegenerators = {}
+    
+    self.typegenerators["CameraData"] = lambda { CameraData.new }
+    self.typegenerators["EventData"] = lambda { EventData.new }
+    self.typegenerators["Attendee"] = lambda { Attendee.new }
     
     # typecasts ripped from rubiii/nori, adapted for xsd types
     def self.typecasts
@@ -241,7 +260,7 @@ module GranicusPlatformAPI
     self.typecasts["symbol"] = lambda { |v| v.nil? ? nil : v.to_sym }
     self.typecasts["string"] = lambda { |v| v.to_s }
     self.typecasts["yaml"] = lambda { |v| v.nil? ? nil : YAML.load(v) }
-    self.typecasts["base64Binary"] = lambda { |v| v.unpack('m').first }    
+    self.typecasts["base64Binary"] = lambda { |v| v.unpack('m').first }
     
     # classmap for generating proper attributes! hash within savon calls
     def self.classmap
@@ -258,5 +277,8 @@ module GranicusPlatformAPI
     self.classmap['TrueClass'] = 'xsd:boolean'
     self.classmap['FalseClass'] = 'xsd:boolean'
     self.classmap['Time'] = 'xsd:dateTime'
+    self.classmap['CameraData'] = 'granicus:CameraData'
+    self.classmap['EventData'] = 'granicus:EventData'
+    self.classmap['Attendee'] = 'granicus:Attendee'
   end
 end
