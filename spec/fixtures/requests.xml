@@ -1,0 +1,27 @@
+<Attendees SOAP-ENC:arrayType="ns2:Attendee[1]" xsi:type="ns2:AttendeeCollection">
+	<item xsi:type="ns2:Attendee">
+		<ID xsi:type="xsd:int">0</ID>
+		<Name xsi:type="xsd:string">another test</Name>
+		<OrderID xsi:type="xsd:int">0</OrderID>
+		<Voting xsi:type="xsd:boolean">true</Voting>
+		<Chair xsi:type="xsd:boolean">true</Chair>
+	</item>
+</Attendees>
+
+<Attendees xsi:type="SOAP-ENC:Array" SOAP-ENC:arrayType="ns4:Attendee[1]" SOAP-ENC:offset="[0]"> 
+	<item xsi:type="ns4:Attendee"> 
+		<ID xsi:type="xsd:int">188</ID> 
+		<Name xsi:type="xsd:string">another test</Name> 
+		<Voting xsi:type="xsd:boolean">true</Voting> 
+		<Chair xsi:type="xsd:boolean">false</Chair> 
+		<OrderID xsi:type="xsd:int">1</OrderID>
+	</item>
+</Attendees>
+
+<Attendees>
+					<item>
+						<Name>Foo Fighters</Name>
+						<Voting>true</Voting>
+						<Chair>true</Chair>
+					</item>
+				</Attendees>

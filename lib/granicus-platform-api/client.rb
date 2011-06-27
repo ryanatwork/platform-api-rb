@@ -18,8 +18,7 @@ module GranicusPlatformAPI
       @client = Savon::Client.new do |wsdl, http|
         wsdl.document = File.expand_path("../granicus-platform-api.xml", __FILE__)
         wsdl.endpoint = "http://#{granicus_site}/SDK/User/index.php" 
-        http.proxy = "http://localhost:8888"
-
+        http.proxy = options[:proxy]
       end
 
       # call login
@@ -60,6 +59,11 @@ module GranicusPlatformAPI
     def get_event(event_id)
       call_soap_method(:get_event,'//ns5:GetEventResponse/event',{ :event_id => event_id })
     end
+    
+    # update an event
+    def update_event(event)
+      call_soap_method(:update_event,'//ns4:UpdateEventResponse',{ :event => event })
+    end
 
     # return all of the event meta data
     def get_event_meta_data(event_id)
@@ -98,7 +102,7 @@ module GranicusPlatformAPI
     
     # return the requested clip
     def get_clip_by_uid(clip_uid)
-      call_soap_method(:get_clipd_by_uid,'//ns5:GetClipByUIDResponse/clip',{ :clip_uid => clip_uid })
+      call_soap_method(:get_clip_by_uid,'//ns5:GetClipByUIDResponse/clip',{ :clip_uid => clip_uid })
     end
 
     # get servers
@@ -113,33 +117,78 @@ module GranicusPlatformAPI
 
     private
     
-    def call_soap_method(method,returnfilter,args={})
+    def call_soap_method(method,returnfilter,args={},debug=false)
       response = @client.request :wsdl, method do
-        soap.body = with_attributes args
+        soap.namespaces['xmlns:granicus'] = "http://granicus.com/xsd"
+        soap.body = prepare_request args
+        if debug then
+          puts soap.body
+        end
       end
 
       doc = Nokogiri::XML(response.to_xml) do |config|
         config.noblanks
       end
-      typecast_value_node doc.xpath(returnfilter, doc.root.namespaces)[0]
+      response = handle_response(doc.xpath(returnfilter, doc.root.namespaces)[0])
+      if debug
+        puts response
+      end
+      response
     end
     
-    def with_attributes(hash={})
+    def prepare_request(hash={})
       attributes = {}
       hash.each do |key,value|
+        case value.class.to_s
+        when 'Hashie::Mash', 'Hash'
+          next if key.to_s.end_with? '_object_type'
+          hash[key] = prepare_request value
+        when 'Array'
+          hash[key] = prepare_array value
+        end
+        attributes[key] = attribute_of value,hash,key
+      end
+      hash.merge!({ :attributes! => attributes })
+    end
+    
+    def prepare_array(array)
+      array.each_index do |index|
+        case array[index].class.to_s
+        when 'Hashie::Mash', 'Hash'
+          array[index] = prepare_request array[index]
+        end
+      end
+      { "item" => array, :attributes! => { "item" => attribute_of(array[0]) } }
+    end
+    
+    def attribute_of(value,hash={},key=nil) 
+      case value.class.to_s
+      when 'Hashie::Mash','Hash'
+        if key.nil?
+          nil
+        else
+          unless hash[key.to_s+'_object_type'].nil?
+            {"xsi:type" => "granicus:#{hash[key+'_object_type']}"}
+          else
+            nil
+          end
+        end
+      when 'Array'
+        {"xsi:type" => 'SOAP-ENC:Array'}
+      else
         xsd_type = self.class.classmap[value.class.to_s]
         if xsd_type.nil? 
           puts "Couldn't get xsd:type for #{value.class}"
+          nil
         else
-          attributes[key] = {"xsi:type" => xsd_type }
+          {"xsi:type" => xsd_type }
         end
       end
-      hash.merge({ :attributes! => attributes })
     end
 
-    def typecast_value_node(node, parent=nil)
+    def handle_response(node, parent=nil)
       if node.is_a? Nokogiri::XML::NodeSet or node.is_a? Array then
-        return node.map {|el| typecast_value_node el } 
+        return node.map {|el| handle_response el } 
       end
       return node.to_s unless node['type'] 
       typespace,type = node['type'].split(':')
@@ -154,7 +203,7 @@ module GranicusPlatformAPI
         end
       when 'SOAP-ENC'
         if type == 'Array' then
-          node.children.map {|element| typecast_value_node element }
+          node.children.map {|element| handle_response element }
         else
           puts "Unknown SOAP-ENC:type: #{type}"
           node.to_s
@@ -163,10 +212,10 @@ module GranicusPlatformAPI
         # we have a custom type, make it hashie since we don't want true static typing
         value = ::Hashie::Mash.new
         node.children.each do |value_node|
-          value[value_node.name.snakecase] = typecast_value_node value_node, value
+          value[value_node.name] = handle_response value_node, value
         end
         # add the type of the complex type to the parent as 'nodename_object_type', this is for handling metadata
-        parent[node.name.snakecase + '_object_type'] = type.snakecase unless parent.nil?
+        parent[node.name + '_object_type'] = type unless parent.nil?
         value
       end
     end
@@ -206,5 +255,8 @@ module GranicusPlatformAPI
     self.classmap = {}
     self.classmap['Fixnum'] = "xsd:int"
     self.classmap['String'] = "xsd:string"
+    self.classmap['TrueClass'] = 'xsd:boolean'
+    self.classmap['FalseClass'] = 'xsd:boolean'
+    self.classmap['Time'] = 'xsd:dateTime'
   end
 end
