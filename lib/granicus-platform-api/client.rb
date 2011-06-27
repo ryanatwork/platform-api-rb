@@ -1,6 +1,4 @@
 require 'savon'
-require 'hashie'
-require 'multi_xml'
 
 module GranicusPlatformAPI
   class Client
@@ -217,7 +215,7 @@ module GranicusPlatformAPI
       attributes = {}
       hash.each do |key,value|
         case value.class.to_s
-        when 'Hashie::Mash', /GranicusPlatformAPI::/, 'Hash'
+        when /GranicusPlatformAPI::/, 'Hash'
           hash[key] = prepare_request value
         when 'Array'
           hash[key] = prepare_array value
@@ -230,7 +228,7 @@ module GranicusPlatformAPI
     def prepare_array(array)
       array.each_index do |index|
         case array[index].class.to_s
-        when 'Hashie::Mash', /GranicusPlatformAPI::/, 'Hash'
+        when /GranicusPlatformAPI::/, 'Hash'
           array[index] = prepare_request array[index]
         end
       end
@@ -239,8 +237,6 @@ module GranicusPlatformAPI
     
     def attribute_of(value) 
       case value.class.to_s
-      when 'Hashie::Mash','Hash'
-        nil
       when 'Array'
         xsd_type = self.class.classmap[value[0].class.to_s.split('::').last]
         if xsd_type.nil? 
@@ -283,14 +279,13 @@ module GranicusPlatformAPI
           node.to_s
         end
       else
-        # we have a custom type, attempt to generate it. if that fails use a hashie
+        # we have a custom type, attempt to generate it. if that fails use a hash
         proc = self.class.typegenerators[type]
         value = {}
         unless proc.nil?
           value = proc.call
         else
           puts "Unknown custom type: #{type}"
-          value = ::Hashie::Mash.new
         end
         node.children.each do |value_node|
           value[value_node.name] = handle_response value_node
