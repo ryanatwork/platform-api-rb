@@ -19,16 +19,27 @@ module GranicusPlatformAPI
 
     self.typegenerators = {}
     
-    self.typegenerators["CameraData"] = lambda { CameraData.new }
-    self.typegenerators["EventData"] = lambda { EventData.new }
+    self.typegenerators["AgendaItem"] = lambda { AgendaItem.new }
     self.typegenerators["Attendee"] = lambda { Attendee.new }
     self.typegenerators["AttendeeStatus"] = lambda { AttendeeStatus.new }
-    self.typegenerators["FolderData"] = lambda { FolderData.new }
+    self.typegenerators["CameraData"] = lambda { CameraData.new }
+    self.typegenerators["CaptionData"] = lambda { CaptionData.new }
     self.typegenerators["ClipData"] = lambda { ClipData.new }
+    self.typegenerators["Document"] = lambda { Document.new }
+    self.typegenerators["EventData"] = lambda { EventData.new }
+    self.typegenerators["FolderData"] = lambda { FolderData.new }
+    self.typegenerators["GroupData"] = lambda { GroupData.new }
+    self.typegenerators["KeyMapping"] = lambda { KeyMapping.new }
     self.typegenerators["MetaDataData"] = lambda { MetaDataData.new }
-    self.typegenerators["AgendaItem"] = lambda { AgendaItem.new }
+    self.typegenerators["Motion"] = lambda { Motion.new }
+    self.typegenerators["Note"] = lambda { Note.new }
     self.typegenerators["Rollcall"] = lambda { Rollcall.new }
-    
+    self.typegenerators["ServerData"] = lambda { ServerData.new }
+    self.typegenerators["ServerInterfaceData"] = lambda { ServerInterfaceData.new }
+    self.typegenerators["TemplateData"] = lambda { TemplateData.new }
+    self.typegenerators["ViewData"] = lambda { ViewData.new }
+    self.typegenerators["VoteEntry"] = lambda { VoteEntry.new }
+    self.typegenerators["VoteRecord"] = lambda { VoteRecord.new }
     
     # classmap for generating proper attributes! hash within savon calls
     def self.classmap
@@ -39,21 +50,36 @@ module GranicusPlatformAPI
       @@classmap = obj
     end
 
+    # built-in types
     self.classmap = {}
     self.classmap['Fixnum'] = "xsd:int"
     self.classmap['String'] = "xsd:string"
     self.classmap['TrueClass'] = 'xsd:boolean'
     self.classmap['FalseClass'] = 'xsd:boolean'
     self.classmap['Time'] = 'xsd:dateTime'
-    self.classmap['CameraData'] = 'granicus:CameraData'
-    self.classmap['EventData'] = 'granicus:EventData'
+    
+    # start custom types
+    self.classmap['AgendaItem'] = 'granicus:AgendaItem'
     self.classmap['Attendee'] = 'granicus:Attendee'
     self.classmap['AttendeeStatus'] = 'granicus:AttendeeStatus'
-    self.classmap['FolderData'] = 'granicus:FolderData'
+    self.classmap['CameraData'] = 'granicus:CameraData'
+    self.classmap['CaptionData'] = 'granicus:CaptionData'
     self.classmap['ClipData'] = 'granicus:ClipData'
+    self.classmap['Document'] = 'granicus:Document'
+    self.classmap['EventData'] = 'granicus:EventData'
+    self.classmap['FolderData'] = 'granicus:FolderData'
+    self.classmap['GroupData'] = 'granicus:GroupData'
+    self.classmap['KeyMapping'] = 'granicus:KeyMapping'
     self.classmap['MetaDataData'] = 'granicus:MetaDataData'
-    self.classmap['AgendaItem'] = 'granicus:AgendaItem'
+    self.classmap['Motion'] = 'granicus:Motion'
+    self.classmap['Note'] = 'granicus:Note'
     self.classmap['Rollcall'] = 'granicus:Rollcall'
+    self.classmap['ServerData'] = 'granicus:ServerData'
+    self.classmap['ServerInterfaceData'] = 'granicus:ServerInterfaceData'
+    self.classmap['TemplateData'] = 'granicus:TemplateData'
+    self.classmap['ViewData'] = 'granicus:ViewData'
+    self.classmap['VoteEntry'] = 'granicus:VoteEntry'
+    self.classmap['VoteRecord'] = 'granicus:VoteRecord'
     
     # create a connected client
     def initialize(granicus_site,username,password,options={})
