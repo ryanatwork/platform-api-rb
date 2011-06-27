@@ -34,10 +34,16 @@ describe GranicusPlatformAPI, "::Client.get_cameras" do
   end
 end
 
-describe GranicusPlatformAPI, "::Client.get_camera" do
-  it "should get the requested camera" do
+describe GranicusPlatformAPI, "::Client Camera CRUD Methods" do
+  it "should create, retreive, update and delete a camera" do
     camera = client.get_camera CAMERA_ID
-    camera.ID.should == CAMERA_ID
+    new_camera_id = client.create_camera camera
+    camera2 = client.get_camera new_camera_id
+    camera2.Name = 'test my new camera'
+    client.update_camera camera2
+    camera3 = client.get_camera new_camera_id
+    camera3.Name.should == 'test my new camera'
+    client.delete_camera new_camera_id
   end
 end
 
@@ -153,6 +159,14 @@ describe GranicusPlatformAPI, "::Client.get_clip_meta_data" do
     metadata = client.get_clip_meta_data CLIP_ID
     found = metadata.find {|m| m.ID == CLIP_META_ID } 
     found.should_not == nil
+  end
+end
+
+describe GranicusPlatformAPI, "::Client.get_meta_data" do
+  it "should get the requested meta data" do
+    metadata = client.get_meta_data CLIP_META_ID
+    metadata.ID = CLIP_META_IT
+    puts metadata
   end
 end
 

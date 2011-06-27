@@ -114,9 +114,24 @@ module GranicusPlatformAPI
       call_soap_method(:get_cameras,'//ns5:GetCamerasResponse/cameras')
     end
     
-    # return the requested event
+    # create a camera
+    def create_camera(camera)
+      call_soap_method(:create_camera,'//ns4:CreateCameraResponse/CameraID',{ :camera_data => camera })
+    end
+    
+    # return the requested camera
     def get_camera(camera_id)
       call_soap_method(:get_camera,'//ns5:GetCameraResponse/camera',{ :camera_id => camera_id })
+    end
+    
+    # update a camera
+    def update_camera(camera)
+      call_soap_method(:update_camera,'//ns4:UpdateCameraResponse',{ :camera => camera })
+    end
+    
+    # delete the requested camera
+    def delete_camera(camera_id)
+      call_soap_method(:delete_camera,'//ns4:DeleteCameraResponse',{ :camera_id => camera_id})
     end
 
     # return all of the events
