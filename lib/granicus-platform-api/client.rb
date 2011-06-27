@@ -4,7 +4,57 @@ require 'multi_xml'
 
 module GranicusPlatformAPI
   class Client
+    
+    # mappings between soap types and our complex types
+    # this area should be rewritten to auto-generate data sets properly
+    # and refactored to separate standard xsd types from custom types in class 
+    # map
+    def self.typegenerators
+      @@typegenerators
+    end
 
+    def self.typegenerators=(obj)
+      @@typegenerators = obj
+    end
+
+    self.typegenerators = {}
+    
+    self.typegenerators["CameraData"] = lambda { CameraData.new }
+    self.typegenerators["EventData"] = lambda { EventData.new }
+    self.typegenerators["Attendee"] = lambda { Attendee.new }
+    self.typegenerators["AttendeeStatus"] = lambda { AttendeeStatus.new }
+    self.typegenerators["FolderData"] = lambda { FolderData.new }
+    self.typegenerators["ClipData"] = lambda { ClipData.new }
+    self.typegenerators["MetaDataData"] = lambda { MetaDataData.new }
+    self.typegenerators["AgendaItem"] = lambda { AgendaItem.new }
+    self.typegenerators["Rollcall"] = lambda { Rollcall.new }
+    
+    
+    # classmap for generating proper attributes! hash within savon calls
+    def self.classmap
+      @@classmap
+    end
+
+    def self.classmap=(obj)
+      @@classmap = obj
+    end
+
+    self.classmap = {}
+    self.classmap['Fixnum'] = "xsd:int"
+    self.classmap['String'] = "xsd:string"
+    self.classmap['TrueClass'] = 'xsd:boolean'
+    self.classmap['FalseClass'] = 'xsd:boolean'
+    self.classmap['Time'] = 'xsd:dateTime'
+    self.classmap['CameraData'] = 'granicus:CameraData'
+    self.classmap['EventData'] = 'granicus:EventData'
+    self.classmap['Attendee'] = 'granicus:Attendee'
+    self.classmap['AttendeeStatus'] = 'granicus:AttendeeStatus'
+    self.classmap['FolderData'] = 'granicus:FolderData'
+    self.classmap['ClipData'] = 'granicus:ClipData'
+    self.classmap['MetaDataData'] = 'granicus:MetaDataData'
+    self.classmap['AgendaItem'] = 'granicus:AgendaItem'
+    self.classmap['Rollcall'] = 'granicus:Rollcall'
+    
     # create a connected client
     def initialize(granicus_site,username,password,options={})
       # set things up
@@ -138,7 +188,6 @@ module GranicusPlatformAPI
     end
     
     def prepare_request(hash={})
-      puts "preparing hash: #{hash}"
       attributes = {}
       hash.each do |key,value|
         case value.class.to_s
@@ -208,7 +257,7 @@ module GranicusPlatformAPI
           node.to_s
         end
       else
-        # we have a custom type, make it hashie since we don't want true static typing
+        # we have a custom type, attempt to generate it. if that fails use a hashie
         proc = self.class.typegenerators[type]
         value = {}
         unless proc.nil?
@@ -223,21 +272,6 @@ module GranicusPlatformAPI
         value
       end
     end
-    
-    # typecasts ripped from rubiii/nori, adapted for xsd types
-    def self.typegenerators
-      @@typegenerators
-    end
-
-    def self.typegenerators=(obj)
-      @@typegenerators = obj
-    end
-
-    self.typegenerators = {}
-    
-    self.typegenerators["CameraData"] = lambda { CameraData.new }
-    self.typegenerators["EventData"] = lambda { EventData.new }
-    self.typegenerators["Attendee"] = lambda { Attendee.new }
     
     # typecasts ripped from rubiii/nori, adapted for xsd types
     def self.typecasts
@@ -261,24 +295,5 @@ module GranicusPlatformAPI
     self.typecasts["string"] = lambda { |v| v.to_s }
     self.typecasts["yaml"] = lambda { |v| v.nil? ? nil : YAML.load(v) }
     self.typecasts["base64Binary"] = lambda { |v| v.unpack('m').first }
-    
-    # classmap for generating proper attributes! hash within savon calls
-    def self.classmap
-      @@classmap
-    end
-
-    def self.classmap=(obj)
-      @@classmap = obj
-    end
-
-    self.classmap = {}
-    self.classmap['Fixnum'] = "xsd:int"
-    self.classmap['String'] = "xsd:string"
-    self.classmap['TrueClass'] = 'xsd:boolean'
-    self.classmap['FalseClass'] = 'xsd:boolean'
-    self.classmap['Time'] = 'xsd:dateTime'
-    self.classmap['CameraData'] = 'granicus:CameraData'
-    self.classmap['EventData'] = 'granicus:EventData'
-    self.classmap['Attendee'] = 'granicus:Attendee'
   end
 end
