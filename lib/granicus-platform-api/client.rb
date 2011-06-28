@@ -96,7 +96,7 @@ module GranicusPlatformAPI
       end
 
       # call login
-      call_soap_method(:login,'//ns4:LoginResponse/return',{:username => username, :password => password})
+      call_soap_method(:login,'//ns4:LoginResponse/return',{'Username' => username, 'Password' => password})
     end
 
     # return the current logged on user name
@@ -116,22 +116,22 @@ module GranicusPlatformAPI
     
     # create a camera
     def create_camera(camera)
-      call_soap_method(:create_camera,'//ns4:CreateCameraResponse/CameraID',{ :camera_data => camera })
+      call_soap_method(:create_camera,'//ns4:CreateCameraResponse/CameraID',{ 'CameraData' => camera })
     end
     
     # return the requested camera
     def get_camera(camera_id)
-      call_soap_method(:get_camera,'//ns5:GetCameraResponse/camera',{ :camera_id => camera_id })
+      call_soap_method(:get_camera,'//ns5:GetCameraResponse/camera',{ 'CameraID' => camera_id })
     end
     
     # update a camera
     def update_camera(camera)
-      call_soap_method(:update_camera,'//ns4:UpdateCameraResponse',{ :camera => camera })
+      call_soap_method(:update_camera,'//ns4:UpdateCameraResponse',{ 'camera' => camera })
     end
     
     # delete the requested camera
     def delete_camera(camera_id)
-      call_soap_method(:delete_camera,'//ns4:DeleteCameraResponse',{ :camera_id => camera_id})
+      call_soap_method(:delete_camera,'//ns4:DeleteCameraResponse',{ 'CameraID' => camera_id})
     end
 
     # return all of the events
@@ -141,52 +141,52 @@ module GranicusPlatformAPI
     
     # return all of the events with matching foreign id
     def get_events_by_foreign_id(foreign_id)
-      call_soap_method(:get_events_by_foreign_id,'//ns5:GetEventsByForeignIDResponse/events',{ :foreign_id => foreign_id })
+      call_soap_method(:get_events_by_foreign_id,'//ns5:GetEventsByForeignIDResponse/events',{ 'ForeignID' => foreign_id })
     end
     
     # create an event
     def create_event(event)
-      call_soap_method(:create_event,'//ns4:CreateEventResponse/EventID',{ :event_data => event })
+      call_soap_method(:create_event,'//ns4:CreateEventResponse/EventID',{ 'EventData' => event })
     end
     
     # return the requested event
     def get_event(event_id)
-      call_soap_method(:get_event,'//ns5:GetEventResponse/event',{ :event_id => event_id })
+      call_soap_method(:get_event,'//ns5:GetEventResponse/event',{ 'EventID' => event_id })
     end
     
     # update an event
     def update_event(event)
-      call_soap_method(:update_event,'//ns4:UpdateEventResponse',{ :event => event })
+      call_soap_method(:update_event,'//ns4:UpdateEventResponse',{ 'event' => event })
     end
     
     # delete the requested event
     def delete_event(event_id)
-      call_soap_method(:delete_event,'//ns4:DeleteEventResponse',{ :event_id => event_id})
+      call_soap_method(:delete_event,'//ns4:DeleteEventResponse',{ 'EventID' => event_id})
     end
 
     # return all of the event meta data
     def get_event_meta_data(event_id)
-      call_soap_method(:get_event_meta_data,'//ns5:GetEventMetaDataResponse/metadata',{ :event_id => event_id })
+      call_soap_method(:get_event_meta_data,'//ns5:GetEventMetaDataResponse/metadata',{ 'EventID' => event_id })
     end
     
     # set the event agenda url
     def set_event_agenda_url(event_id,url)
-      call_soap_method(:set_event_agenda_url,'//ns4:SetEventAgendaURLResponse',{ :event_id => event_id,  :url => url })
+      call_soap_method(:set_event_agenda_url,'//ns4:SetEventAgendaURLResponse',{ 'EventID' => event_id,  'URL' => url })
     end
     
     # return all of the clip meta data
     def get_clip_meta_data(clip_id)
-      call_soap_method(:get_clip_meta_data,'//ns5:GetClipMetaDataResponse/metadata',{ :clip_id => clip_id })
+      call_soap_method(:get_clip_meta_data,'//ns5:GetClipMetaDataResponse/metadata',{ 'ClipID' => clip_id })
     end
     
     # get meta data by id
     def get_meta_data(meta_id)
-      call_soap_method(:get_meta_data,'//ns5:GetMetaDataResponse/MetaData', { :meta_data_id => meta_id })
+      call_soap_method(:get_meta_data,'//ns5:GetMetaDataResponse/MetaData', { 'MetaDataID' => meta_id })
     end
     
     # update metadata 
     def update_meta_data(meta_data)
-      call_soap_method(:update_meta_data,'//ns4:UpdateMetaDataResponse', { :meta_data => meta_data },true)
+      call_soap_method(:update_meta_data,'//ns4:UpdateMetaDataResponse', { 'MetaData' => meta_data },true)
     end
 
     # return all of the folders
@@ -196,22 +196,22 @@ module GranicusPlatformAPI
 
     # return all of the clips
     def get_clips(folder_id)
-      call_soap_method(:get_clips,'//ns5:GetClipsResponse/clips',{ :folder_id => folder_id })
+      call_soap_method(:get_clips,'//ns5:GetClipsResponse/clips',{ 'FolderID' => folder_id })
     end
     
     # return all of the clips with matching foreign id
     def get_clips_by_foreign_id(foreign_id)
-      call_soap_method(:get_clips_by_foreign_id,'//ns5:GetClipsByForeignIDResponse/clips',{ :foreign_id => foreign_id })
+      call_soap_method(:get_clips_by_foreign_id,'//ns5:GetClipsByForeignIDResponse/clips',{ 'ForeignID' => foreign_id })
     end
     
     # return the requested clip
     def get_clip(clip_id)
-      call_soap_method(:get_clip,'//ns5:GetClipResponse/clip',{ :clip_id => clip_id })
+      call_soap_method(:get_clip,'//ns5:GetClipResponse/clip',{ 'ClipID' => clip_id })
     end
     
     # return the requested clip
     def get_clip_by_uid(clip_uid)
-      call_soap_method(:get_clip_by_uid,'//ns5:GetClipByUIDResponse/clip',{ :clip_uid => clip_uid })
+      call_soap_method(:get_clip_by_uid,'//ns5:GetClipByUIDResponse/clip',{ 'ClipUID' => clip_uid })
     end
 
     # get servers
@@ -221,7 +221,7 @@ module GranicusPlatformAPI
     
     # return the requested server
     def get_server(server_id)
-      call_soap_method(:get_server,'//ns5:GetServerResponse/server',{ :server_id => server_id })
+      call_soap_method(:get_server,'//ns5:GetServerResponse/server',{ 'ServerID' => server_id })
     end
 
     #private
