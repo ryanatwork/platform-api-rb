@@ -144,6 +144,11 @@ module GranicusPlatformAPI
       call_soap_method(:get_events_by_foreign_id,'//ns5:GetEventsByForeignIDResponse/events',{ :foreign_id => foreign_id })
     end
     
+    # create an event
+    def create_event(event)
+      call_soap_method(:create_event,'//ns4:CreateEventResponse/EventID',{ :event_data => event })
+    end
+    
     # return the requested event
     def get_event(event_id)
       call_soap_method(:get_event,'//ns5:GetEventResponse/event',{ :event_id => event_id })
@@ -152,6 +157,11 @@ module GranicusPlatformAPI
     # update an event
     def update_event(event)
       call_soap_method(:update_event,'//ns4:UpdateEventResponse',{ :event => event })
+    end
+    
+    # delete the requested event
+    def delete_event(event_id)
+      call_soap_method(:delete_event,'//ns4:DeleteEventResponse',{ :event_id => event_id})
     end
 
     # return all of the event meta data
@@ -167,6 +177,11 @@ module GranicusPlatformAPI
     # return all of the clip meta data
     def get_clip_meta_data(clip_id)
       call_soap_method(:get_clip_meta_data,'//ns5:GetClipMetaDataResponse/metadata',{ :clip_id => clip_id })
+    end
+    
+    # get meta data by id
+    def get_meta_data(meta_id)
+      call_soap_method(:get_meta_data,'//ns5:GetMetaDataResponse/MetaData', { :meta_data_id => meta_id })
     end
 
     # return all of the folders
