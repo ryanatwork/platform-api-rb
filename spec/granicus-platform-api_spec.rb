@@ -143,7 +143,15 @@ describe GranicusPlatformAPI, "::Client MetaData Methods" do
   it "should get the requested meta data" do
     metadata = client.get_meta_data CLIP_META_ID
     metadata.ID = CLIP_META_ID
-    puts metadata
+  end
+  it "should update the metadata" do 
+    metadata = client.get_meta_data CLIP_META_ID
+    old_name = metadata.Name
+    metadata.Name = 'test'
+    client.update_meta_data metadata
+    client.get_meta_data(CLIP_META_ID).Name.should == 'test'
+    metadata.Name = old_name
+    client.update_meta_data metadata
   end
 end
 

@@ -92,7 +92,7 @@ module GranicusPlatformAPI
       @client = Savon::Client.new do |wsdl, http|
         wsdl.document = File.expand_path("../granicus-platform-api.xml", __FILE__)
         wsdl.endpoint = "http://#{granicus_site}/SDK/User/index.php" 
-        http.proxy = options[:proxy]
+        http.proxy = options[:proxy] if not options[:proxy].nil?
       end
 
       # call login
@@ -183,6 +183,11 @@ module GranicusPlatformAPI
     def get_meta_data(meta_id)
       call_soap_method(:get_meta_data,'//ns5:GetMetaDataResponse/MetaData', { :meta_data_id => meta_id })
     end
+    
+    # update metadata 
+    def update_meta_data(meta_data)
+      call_soap_method(:update_meta_data,'//ns4:UpdateMetaDataResponse', { :meta_data => meta_data },true)
+    end
 
     # return all of the folders
     def get_folders
@@ -219,13 +224,13 @@ module GranicusPlatformAPI
       call_soap_method(:get_server,'//ns5:GetServerResponse/server',{ :server_id => server_id })
     end
 
-    private
+    #private
     
     def call_soap_method(method,returnfilter,args={},debug=false)
       response = @client.request :wsdl, method do
         soap.namespaces['xmlns:granicus'] = "http://granicus.com/xsd"
         soap.namespaces['xmlns:SOAP-ENC'] = "http://schemas.xmlsoap.org/soap/encoding/"
-        soap.body = prepare_request args
+        soap.body = prepare_hash args
         if debug then
           puts soap.body
         end
@@ -241,36 +246,46 @@ module GranicusPlatformAPI
       response
     end
     
-    def prepare_request(hash={})
+    def prepare_hash(hash={})
       attributes = {}
+      new_hash = {}
       hash.each do |key,value|
         case value.class.to_s
         when /GranicusPlatformAPI::/, 'Hash'
-          hash[key] = prepare_request value
+          new_hash[key] = prepare_hash value
         when 'Array'
-          hash[key] = prepare_array value
+          new_hash[key] = prepare_array value
+        else
+          new_hash[key] = value
         end
         attributes[key] = attribute_of value
       end
-      hash.merge!({ :attributes! => attributes })
+      new_hash.merge({ :attributes! => attributes })
     end
     
     def prepare_array(array)
-      array.each_index do |index|
-        case array[index].class.to_s
+      return { "item" => array } if array.count == 0
+      new_array = []
+      array.each do |item|
+        case item.class.to_s
         when /GranicusPlatformAPI::/, 'Hash'
-          array[index] = prepare_request array[index]
+          new_array << prepare_hash(item)
+        when 'Array'
+          new_array << prepare_array(item)
+        else
+          new_array << item
         end
       end
-      { "item" => array, :attributes! => { "item" => attribute_of(array[0]) } }
+      { "item" => new_array, :attributes! => { "item" => attribute_of(array[0]) } }
     end
     
     def attribute_of(value) 
       case value.class.to_s
       when 'Array'
+        return {"xsi:type" => 'SOAP-ENC:Array'} if value.count == 0
         xsd_type = self.class.classmap[value[0].class.to_s.split('::').last]
         if xsd_type.nil? 
-          puts "Couldn't get xsd:type for #{value.class}"
+          puts "Couldn't get array xsd:type for #{value[0].class}"
           {"xsi:type" => 'SOAP-ENC:Array'}
         else
           {"xsi:type" => 'SOAP-ENC:Array', "SOAP-ENC:arrayType" => "#{xsd_type}[#{value.count}]"}
