@@ -24,6 +24,11 @@ describe GranicusPlatformAPI, "::Client.new" do
     logon = client.get_current_user_logon
     logon.should == GRANICUS_LOGIN
   end
+  it "should support impersonation" do
+    client2 = GranicusPlatformAPI::Client.new GRANICUS_SITE,nil,nil,{:proxy => 'http://localhost:8888' }
+    client2.impersonate client.impersonation_token
+    client2.get_current_user_logon.should == client.get_current_user_logon
+  end
 end
 
 describe GranicusPlatformAPI, "::Client Camera Methods" do

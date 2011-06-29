@@ -79,26 +79,80 @@ module GranicusPlatformAPI
     self.classmap['VoteEntry'] = 'granicus:VoteEntry'
     self.classmap['VoteRecord'] = 'granicus:VoteRecord'
     
-    # create a connected client
-    def initialize(granicus_site,username,password,options={})
-      # set things up
-      @granicus_site = granicus_site
+    # create a client
+    def initialize(granicus_site=nil,username=nil,password=nil,options={})
+      # setup our private members
+      @options = options
+      @impersonation_token = nil
+      @connected = false
+      
+      # configure savon
       Savon.configure do |config|
         config.log = false
       end
       HTTPI.log = false
-
-      # create the client
-      @client = Savon::Client.new do |wsdl, http|
-        wsdl.document = File.expand_path("../granicus-platform-api.xml", __FILE__)
-        wsdl.endpoint = "http://#{granicus_site}/SDK/User/index.php" 
-        http.proxy = options[:proxy] if not options[:proxy].nil?
+      
+      # connect if we have a site and credentials
+      unless granicus_site.nil?
+        self.site = granicus_site
       end
 
+      unless username.nil? or password.nil?
+        login(username,password)
+      end
+    end
+    
+    # options
+    def options
+      @options
+    end
+    def options=(value)
+      @options = value
+    end
+    
+    # connect up to a site
+    def connect(granicus_site,username,password,options={})
+      logout if @connected
+      
+      # create the client
+      site = granicus_site
+      
       # call login
-      call_soap_method(:login,'//ns4:LoginResponse/return',{'Username' => username, 'Password' => password})
+      login username, password
+    end
+    
+    # site property
+    def site
+      return @granicus_site
+    end
+    
+    def site=(value)
+      @granicus_site = value
+      @client = Savon::Client.new do |wsdl, http|
+        wsdl.document = File.expand_path("../granicus-platform-api.xml", __FILE__)
+        wsdl.endpoint = "http://#{value}/SDK/User/index.php" 
+        http.proxy = @options[:proxy] if not @options[:proxy].nil?
+      end
+    end
+    
+    # impersonate a user
+    def impersonate(token)
+      @impersonation_token = token
+      @client.http.headers["Cookie"] = "SESS1=#{token}; path=/"
+    end
+    
+    def impersonation_token
+      @impersonation_token
     end
 
+    # login
+    def login(username,password)
+      logout if @connected
+      call_soap_method(:login,'//ns4:LoginResponse/return',{'Username' => username, 'Password' => password})
+      @impersonation_token = @response.http.headers['Set-Cookie'].gsub(/SESS1=(.*); path=\//,'\\1')
+      @connected = true
+    end
+    
     # return the current logged on user name
     def get_current_user_logon
       call_soap_method(:get_current_user_logon,'//ns4:GetCurrentUserLogonResponse/Logon')
@@ -107,6 +161,7 @@ module GranicusPlatformAPI
     # logout
     def logout
       call_soap_method(:logout,'//ns4:LogoutResponse')
+      @connected = false
     end
 
     # return all of the cameras
@@ -227,7 +282,7 @@ module GranicusPlatformAPI
     #private
     
     def call_soap_method(method,returnfilter,args={},debug=false)
-      response = @client.request :wsdl, method do
+      @response = @client.request :wsdl, method do
         soap.namespaces['xmlns:granicus'] = "http://granicus.com/xsd"
         soap.namespaces['xmlns:SOAP-ENC'] = "http://schemas.xmlsoap.org/soap/encoding/"
         soap.body = prepare_hash args
@@ -235,8 +290,8 @@ module GranicusPlatformAPI
           puts soap.body
         end
       end
-
-      doc = Nokogiri::XML(response.to_xml) do |config|
+      
+      doc = Nokogiri::XML(@response.to_xml) do |config|
         config.noblanks
       end
       response = handle_response(doc.xpath(returnfilter, doc.root.namespaces)[0])
