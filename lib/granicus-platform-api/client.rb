@@ -115,7 +115,7 @@ module GranicusPlatformAPI
       logout if @connected
       
       # create the client
-      site = granicus_site
+      self.site = granicus_site
       
       # call login
       login username, password
@@ -209,6 +209,11 @@ module GranicusPlatformAPI
       call_soap_method(:get_event,'//ns5:GetEventResponse/event',{ 'EventID' => event_id })
     end
     
+    # return the requested event by uid
+    def get_event_by_uid(event_uid)
+      call_soap_method(:get_event_by_uid,'//ns5:GetEventByUIDResponse/event',{ 'EventUID' => event_uid })
+    end
+    
     # update an event
     def update_event(event)
       call_soap_method(:update_event,'//ns4:UpdateEventResponse',{ 'event' => event })
@@ -241,7 +246,7 @@ module GranicusPlatformAPI
     
     # update metadata 
     def update_meta_data(meta_data)
-      call_soap_method(:update_meta_data,'//ns4:UpdateMetaDataResponse', { 'MetaData' => meta_data },true)
+      call_soap_method(:update_meta_data,'//ns4:UpdateMetaDataResponse', { 'MetaData' => meta_data })
     end
 
     # return all of the folders
@@ -281,7 +286,8 @@ module GranicusPlatformAPI
 
     #private
     
-    def call_soap_method(method,returnfilter,args={},debug=false)
+    def call_soap_method(method,returnfilter,args={})
+      debug = @options[:debug]
       @response = @client.request :wsdl, method do
         soap.namespaces['xmlns:granicus'] = "http://granicus.com/xsd"
         soap.namespaces['xmlns:SOAP-ENC'] = "http://schemas.xmlsoap.org/soap/encoding/"

@@ -9,8 +9,8 @@ EVENT_ID = 30
 UPDATE_EVENT_ID = 35
 EVENT_META_ID = 1775
 CLIP_ID = 246
-CLIP_UID = '00000000-0000-0000-0000-000000000000'
-EVENT_UID = '00000000-0000-0000-0000-000000000000'
+CLIP_UID = 'fe2a4b4b-0a69-1029-bc86-1bdd06848612'
+EVENT_UID = '5fa327b8-906b-102b-b291-2f582cd39e9e'
 CLIP_META_ID = 574
 CLIP_FOREIGN_ID = 1
 EVENT_FOREIGN_ID = 1
@@ -28,6 +28,12 @@ describe GranicusPlatformAPI, "::Client.new" do
     client2 = GranicusPlatformAPI::Client.new GRANICUS_SITE,nil,nil,{:proxy => 'http://localhost:8888' }
     client2.impersonate client.impersonation_token
     client2.get_current_user_logon.should == client.get_current_user_logon
+  end
+  it "should support initialize without arguments" do
+    client2 = GranicusPlatformAPI::Client.new
+    client2.connect(GRANICUS_SITE,GRANICUS_LOGIN,GRANICUS_PASSWORD)
+    client2.get_current_user_logon
+    client2.logout
   end
 end
 
@@ -129,7 +135,7 @@ describe GranicusPlatformAPI, "::Client Clip Methods" do
   end
   it "should get the requested clip by UID" do
     clip = client.get_clip_by_uid CLIP_UID
-    clip.ID.should == CLIP_UID
+    clip.UID.should == CLIP_UID
   end
 end
 
