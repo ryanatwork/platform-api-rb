@@ -6,9 +6,11 @@ GRANICUS_PASSWORD = ENV['PASSWORD']
 CAMERA_ID = 3
 FOLDER_ID = 7
 EVENT_ID = 30
+IMPORT_EVENT_ID = 26
 UPDATE_EVENT_ID = 35
 EVENT_META_ID = 1775
 CLIP_ID = 246
+IMPORT_CLIP_ID = 375
 CLIP_UID = 'fe2a4b4b-0a69-1029-bc86-1bdd06848612'
 EVENT_UID = '5fa327b8-906b-102b-b291-2f582cd39e9e'
 CLIP_META_ID = 574
@@ -71,6 +73,20 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     event3 = client.get_event new_event_id
     event3.Name.should == 'test my new event'
     client.delete_event new_event_id
+  end
+  it "should import metadata" do
+    meta_arr = []
+    meta1 = GranicusPlatformAPI::MetaDataData.new
+    meta1.Name = 'test'
+    meta1.ForeignID = 1
+    meta2 = GranicusPlatformAPI::MetaDataData.new
+    meta2.Name = 'test 2'
+    meta2.ForeignID = 2
+    meta_arr << meta1
+    meta_arr << meta2
+    keytable = client.import_event_meta_data IMPORT_EVENT_ID, meta_arr
+    keytable[0].ForeignID.should == 1
+    keytable[1].ForeignID.should == 2
   end
   it "should get all events with matching foreign id" do
     events = client.get_events_by_foreign_id EVENT_FOREIGN_ID
@@ -136,6 +152,22 @@ describe GranicusPlatformAPI, "::Client Clip Methods" do
   it "should get the requested clip by UID" do
     clip = client.get_clip_by_uid CLIP_UID
     clip.UID.should == CLIP_UID
+  end
+  it "should import metadata" do
+    meta_arr = []
+    meta1 = GranicusPlatformAPI::MetaDataData.new
+    meta1.Name = 'test'
+    meta1.TimeStamp = 0
+    meta1.ForeignID = 1
+    meta2 = GranicusPlatformAPI::MetaDataData.new
+    meta2.Name = 'test 2'
+    meta2.TimeStamp = 30
+    meta2.ForeignID = 2
+    meta_arr << meta1
+    meta_arr << meta2
+    keytable = client.import_clip_meta_data IMPORT_CLIP_ID, meta_arr
+    keytable[0].ForeignID.should == 1
+    keytable[1].ForeignID.should == 2
   end
 end
 

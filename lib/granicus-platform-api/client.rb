@@ -229,6 +229,15 @@ module GranicusPlatformAPI
       call_soap_method(:get_event_meta_data,'//ns5:GetEventMetaDataResponse/metadata',{ 'EventID' => event_id })
     end
     
+    # import metadata for an event
+    def import_event_meta_data(event_id,meta_data,clear_existing=true,as_tree=true)
+      call_soap_method(:import_event_meta_data,'//ns5:ImportEventMetaDataResponse/KeyTable',{ 
+        'EventID' => event_id, 
+        'MetaData' => meta_data,
+        'ClearExisting' => clear_existing,
+        'AsTree' => as_tree})
+    end
+    
     # set the event agenda url
     def set_event_agenda_url(event_id,url)
       call_soap_method(:set_event_agenda_url,'//ns4:SetEventAgendaURLResponse',{ 'EventID' => event_id,  'URL' => url })
@@ -237,6 +246,16 @@ module GranicusPlatformAPI
     # return all of the clip meta data
     def get_clip_meta_data(clip_id)
       call_soap_method(:get_clip_meta_data,'//ns5:GetClipMetaDataResponse/metadata',{ 'ClipID' => clip_id })
+    end
+    
+    # import metadata for a clip
+    # ImportClipMetaData Method (ClipID, MetaData, ClearExisting, AsTree) 
+    def import_clip_meta_data(clip_id,meta_data,clear_existing=true,as_tree=true)
+      call_soap_method(:import_clip_meta_data,'//ns5:ImportClipMetaDataResponse/KeyTable',{ 
+        'ClipID' => clip_id, 
+        'MetaData' => meta_data,
+        'ClearExisting' => clear_existing,
+        'AsTree' => as_tree})
     end
     
     # get meta data by id

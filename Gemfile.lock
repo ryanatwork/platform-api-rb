@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    granicus-platform-api (0.1.5)
+    granicus-platform-api (0.1.6)
       hashie (~> 1.0.0)
       savon (~> 0.9.2)
 
