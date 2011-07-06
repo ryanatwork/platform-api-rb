@@ -288,6 +288,11 @@ module GranicusPlatformAPI
       call_soap_method(:get_clip,'//ns5:GetClipResponse/clip',{ 'ClipID' => clip_id })
     end
     
+    # update a clip
+    def update_clip(clip)
+      call_soap_method(:update_clip,'//ns4:UpdateClipResponse',{ 'clip' => clip })
+    end
+    
     # return the requested clip
     def get_clip_by_uid(clip_uid)
       call_soap_method(:get_clip_by_uid,'//ns5:GetClipByUIDResponse/clip',{ 'ClipUID' => clip_uid })

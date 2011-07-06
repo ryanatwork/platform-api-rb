@@ -149,6 +149,17 @@ describe GranicusPlatformAPI, "::Client Clip Methods" do
     clip = client.get_clip CLIP_ID
     clip.ID.should == CLIP_ID
   end
+  
+  it "should update the given clip" do
+    clip = client.get_clip CLIP_ID
+    name = clip.Name
+    clip.Name = 'this is my test name'
+    client.update_clip clip
+    clip2 = client.get_clip CLIP_ID
+    clip2.Name.should == 'this is my test name'
+    clip2.Name = name
+    client.update_clip clip2
+  end
   it "should get the requested clip by UID" do
     clip = client.get_clip_by_uid CLIP_UID
     clip.UID.should == CLIP_UID
