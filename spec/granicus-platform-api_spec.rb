@@ -18,7 +18,7 @@ CLIP_FOREIGN_ID = 1
 EVENT_FOREIGN_ID = 1
 SERVER_ID = 2
 
-client = GranicusPlatformAPI::Client.new GRANICUS_SITE, GRANICUS_LOGIN, GRANICUS_PASSWORD, {:proxy => 'http://localhost:8888'}
+client = GranicusPlatformAPI::Client.new GRANICUS_SITE, GRANICUS_LOGIN, GRANICUS_PASSWORD
 
 # The projects method
 describe GranicusPlatformAPI, "::Client.new" do
@@ -27,7 +27,7 @@ describe GranicusPlatformAPI, "::Client.new" do
     logon.should == GRANICUS_LOGIN
   end
   it "should support impersonation" do
-    client2 = GranicusPlatformAPI::Client.new GRANICUS_SITE,nil,nil,{:proxy => 'http://localhost:8888' }
+    client2 = GranicusPlatformAPI::Client.new GRANICUS_SITE,nil,nil
     client2.impersonate client.impersonation_token
     client2.get_current_user_logon.should == client.get_current_user_logon
   end
@@ -185,6 +185,11 @@ end
 describe GranicusPlatformAPI, "::Client MetaData Methods" do
   it "should get an event's meta data" do
     metadata = client.get_event_meta_data EVENT_ID
+    found = metadata.find {|m| m.ID == EVENT_META_ID } 
+    found.should_not == nil
+  end
+  it "should get an event's meta data by UID" do
+    metadata = client.get_event_meta_data_by_uid EVENT_UID
     found = metadata.find {|m| m.ID == EVENT_META_ID } 
     found.should_not == nil
   end
