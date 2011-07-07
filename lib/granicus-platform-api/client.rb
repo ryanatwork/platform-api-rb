@@ -229,6 +229,11 @@ module GranicusPlatformAPI
       call_soap_method(:get_event_meta_data,'//ns5:GetEventMetaDataResponse/metadata',{ 'EventID' => event_id })
     end
     
+    # return all of the event meta data by UID
+    def get_event_meta_data_by_uid(event_uid)
+      call_soap_method(:get_event_meta_data_by_uid,'//ns5:GetEventMetaDataByUIDResponse/metadata',{ 'EventUID' => event_uid })
+    end
+    
     # import metadata for an event
     def import_event_meta_data(event_id,meta_data,clear_existing=true,as_tree=true)
       call_soap_method(:import_event_meta_data,'//ns5:ImportEventMetaDataResponse/KeyTable',{ 
