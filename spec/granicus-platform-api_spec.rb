@@ -185,6 +185,7 @@ end
 describe GranicusPlatformAPI, "::Client MetaData Methods" do
   it "should get an event's meta data" do
     metadata = client.get_event_meta_data EVENT_ID
+    puts metadata
     found = metadata.find {|m| m.ID == EVENT_META_ID } 
     found.should_not == nil
   end

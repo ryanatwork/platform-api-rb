@@ -226,12 +226,12 @@ module GranicusPlatformAPI
 
     # return all of the event meta data
     def get_event_meta_data(event_id)
-      call_soap_method(:get_event_meta_data,'//ns5:GetEventMetaDataResponse/metadata',{ 'EventID' => event_id })
+      build_meta_tree call_soap_method(:get_event_meta_data,'//ns5:GetEventMetaDataResponse/metadata',{ 'EventID' => event_id })
     end
     
     # return all of the event meta data by UID
     def get_event_meta_data_by_uid(event_uid)
-      call_soap_method(:get_event_meta_data_by_uid,'//ns5:GetEventMetaDataByUIDResponse/metadata',{ 'EventUID' => event_uid })
+      build_meta_tree call_soap_method(:get_event_meta_data_by_uid,'//ns5:GetEventMetaDataByUIDResponse/metadata',{ 'EventUID' => event_uid })
     end
     
     # import metadata for an event
@@ -250,7 +250,7 @@ module GranicusPlatformAPI
     
     # return all of the clip meta data
     def get_clip_meta_data(clip_id)
-      call_soap_method(:get_clip_meta_data,'//ns5:GetClipMetaDataResponse/metadata',{ 'ClipID' => clip_id })
+      build_meta_tree call_soap_method(:get_clip_meta_data,'//ns5:GetClipMetaDataResponse/metadata',{ 'ClipID' => clip_id })
     end
     
     # import metadata for a clip
@@ -427,6 +427,18 @@ module GranicusPlatformAPI
         end
         value
       end
+    end
+    
+    # translate metadata list returned by the get_event and get_clip meta data functions into a tree
+    def build_meta_tree(list,parent_id=0)
+      tree = []
+      list.each do |item|
+        if item.ParentID == parent_id
+          item.Children = build_meta_tree list, item.ID
+          tree << item
+        end
+      end
+      tree
     end
     
     # typecasts ripped from rubiii/nori, adapted for xsd types
