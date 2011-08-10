@@ -74,6 +74,11 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     event3.Name.should == 'test my new event'
     client.delete_event new_event_id
   end
+  it "should have the NextStartDate and AgendaRolloverID fields" do
+    event = client.get_event EVENT_ID
+    event.NextStartDate.should_not == nil
+    event.AgendaRolloverID.should_not == nil 
+  end
   it "should import metadata" do
     meta_arr = []
     meta1 = GranicusPlatformAPI::MetaDataData.new
