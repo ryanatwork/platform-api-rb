@@ -29,6 +29,8 @@
 <element name="AgendaTitle" type="xsd:string" />
 <element name="MeetingTime" type="xsd:dateTime" />
 <element name="AgendaPostedDate" type="xsd:dateTime" />
+<element name="NextStartDate" type="xsd:dateTime"/>
+<element name="AgendaRolloverID" type="xsd:int"/>
 </all>
 </complexType>
 <complexType name="FolderData">

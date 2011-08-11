@@ -98,6 +98,8 @@ module GranicusPlatformAPI
     property :AgendaTitle
     property :MeetingTime
     property :AgendaPostedDate
+    property :NextStartDate
+    property :AgendaRolloverID
   end
   
   class FolderData < Hashie::Dash
