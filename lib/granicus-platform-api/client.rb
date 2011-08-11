@@ -321,6 +321,7 @@ module GranicusPlatformAPI
         soap.namespaces['xmlns:granicus'] = "http://granicus.com/xsd"
         soap.namespaces['xmlns:SOAP-ENC'] = "http://schemas.xmlsoap.org/soap/encoding/"
         soap.body = prepare_hash args
+        puts(prepare_hash args)
         if debug then
           puts soap.body
         end

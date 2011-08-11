@@ -1,0 +1,31 @@
+streaming:
+  camera_id: 3
+  folder_id: 7
+  event_id:  30
+  event_uid:  5fa327b8-906b-102b-b291-2f582cd39e9e
+  import_event_id: 26
+  update_event_id: 35
+  event_meta_id: 1775
+  clip_id: 246
+  import_clip_id:  375
+  clip_uid: fe2a4b4b-0a69-1029-bc86-1bdd06848612
+  clip_meta_id: 574
+  clip_foreign_id: 1
+  event_foreign_id: 1
+  server_id: 2
+
+citizen.dev.granicus.com:
+  camera_id: 1
+  folder_id: 1
+  event_id: 742
+  event_uid: 42a8238d-7638-102e-bb2d-9326039e1073
+  import_event_id: 742
+  update_event_id: 760
+  event_meta_id: 8160
+  clip_id: 719
+  clip_uid: 0f5e350b-7546-102e-bb2d-9326039e1073
+  import_clip_id:  2230
+  clip_meta_id: 613
+  clip_foreign_id: 1
+  event_foreign_id: 1
+  server_id: 1
