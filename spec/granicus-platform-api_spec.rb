@@ -90,6 +90,7 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     event = client.get_event EVENT_ID
     event.NextStartDate.should_not == nil
     event.AgendaRolloverID.should_not == nil
+    event.ECommentEnabled.should_not == nil
   end
 
   it "should import metadata" do

@@ -100,6 +100,7 @@ module GranicusPlatformAPI
     property :AgendaPostedDate
     property :NextStartDate
     property :AgendaRolloverID
+    property :ECommentEnabled
   end
   
   class FolderData < Hashie::Dash
