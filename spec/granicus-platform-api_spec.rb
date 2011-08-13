@@ -68,22 +68,34 @@ describe GranicusPlatformAPI, "::Client Camera Methods" do
 end
 
 describe GranicusPlatformAPI, "::Client Event Methods" do
-  it "should get all events" do
+  it "should support CRUD operations" do
+    # create
+    event = GranicusPlatformAPI::EventData.new
+    event.Name = "platform-api-rb unit test event"
+    event.StartTime = Time.now() - 300
+    event.Duration = 3600
+    event.FolderID = client.get_folders()[0].ID
+    event.CameraID = client.get_cameras()[0].ID
+    
+    event.ID = client.create_event event
+    
+    # retrieve one
+    fetch_event = client.get_event event.ID
+    fetch_event.ID.should == event.ID
+    fetch_event.Name.should == event.Name
+    
+    # retrieve many
     events = client.get_events
-    found  = events.find { |e| e.ID == EVENT_ID }
-    found.should_not == nil
-  end
-
-  it "should get the requested event" do
-    event        = client.get_event EVENT_ID
-    event.UID    = ''
-    new_event_id = client.create_event event
-    event2       = client.get_event new_event_id
-    event2.Name  = 'test my new event'
-    client.update_event event2
-    event3 = client.get_event new_event_id
-    event3.Name.should == 'test my new event'
-    client.delete_event new_event_id
+    found  = events.find { |e| e.ID == event.ID }
+    # update
+    event.Name = 'platform-api-rb unit test event updated'
+    client.update_event event
+    fetch_event = client.get_event event.ID
+    fetch_event.ID.should == event.ID
+    fetch_event.Name.should == event.Name
+    
+    # delete
+    client.delete_event event.ID
   end
 
   it "should have the NextStartDate and AgendaRolloverID fields" do
@@ -94,6 +106,9 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
   end
 
   it "should import metadata" do
+    event        = client.get_event EVENT_ID
+    event.UID    = ''
+    new_event_id = client.create_event event
     meta_arr        = []
     meta1           = GranicusPlatformAPI::MetaDataData.new
     meta1.Name      = 'test'
@@ -103,9 +118,10 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     meta2.ForeignID = 2
     meta_arr << meta1
     meta_arr << meta2
-    keytable = client.import_event_meta_data IMPORT_EVENT_ID, meta_arr
+    keytable = client.import_event_meta_data new_event_id, meta_arr
     keytable[0].ForeignID.should == 1
     keytable[1].ForeignID.should == 2
+    client.delete_event new_event_id
   end
 
   it "should get all events with matching foreign id" do
@@ -211,7 +227,6 @@ end
 describe GranicusPlatformAPI, "::Client MetaData Methods" do
   it "should get an event's meta data" do
     metadata = client.get_event_meta_data EVENT_ID
-    puts metadata
     found = metadata.find { |m| m.ID == EVENT_META_ID }
     found.should_not == nil
   end
