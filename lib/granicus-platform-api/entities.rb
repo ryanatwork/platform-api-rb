@@ -69,6 +69,8 @@ module GranicusPlatformAPI
   class Document < Hashie::Dash
     property :Description
     property :Location
+    property :FileContents
+    property :FileExtension
   end
   
   class EventData < Hashie::Dash
@@ -99,6 +101,7 @@ module GranicusPlatformAPI
     property :MeetingTime
     property :AgendaPostedDate
     property :NextStartDate
+    property :Status
     property :AgendaRolloverID
     property :ECommentEnabled
   end

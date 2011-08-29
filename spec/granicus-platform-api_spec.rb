@@ -247,6 +247,20 @@ describe GranicusPlatformAPI, "::Client MetaData Methods" do
     metadata    = client.get_meta_data CLIP_META_ID
     metadata.ID = CLIP_META_ID
   end
+  
+  it "should support uploading documents" do
+    document    = GranicusPlatformAPI::Document.new
+    document.Description = "My test document"
+    document.FileContents = fixture('About Stacks.pdf')
+    document.FileExtension = document.FileContents.path.split('.').last
+    document_meta = GranicusPlatformAPI::MetaDataData.new
+    document_meta.Name = 'test doc'
+    document_meta.ForeignID = 2
+    document_meta.Payload = document
+    document_meta.ParentID = CLIP_META_ID
+    puts document_meta
+    client.add_clip_meta_data CLIP_ID, document_meta
+  end
 
   it "should update the metadata" do
     metadata      = client.get_meta_data CLIP_META_ID

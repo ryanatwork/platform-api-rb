@@ -55,6 +55,7 @@ module GranicusPlatformAPI
     self.classmap['TrueClass'] = 'xsd:boolean'
     self.classmap['FalseClass'] = 'xsd:boolean'
     self.classmap['Time'] = 'xsd:dateTime'
+    self.classmap['File'] = 'xsd:base64Binary'
     
     # start custom types
     self.classmap['AgendaItem'] = 'granicus:AgendaItem'
@@ -263,6 +264,13 @@ module GranicusPlatformAPI
         'AsTree' => as_tree})
     end
     
+    # add metadata to a clip
+    def add_clip_meta_data(clip_id,meta_data,options={})
+      call_soap_method(:add_clip_meta_data,'//ns5:AddClipMetaDataResponse/KeyTable',{
+        'ClipID' => clip_id,
+        'MetaData' => meta_data},options)
+    end
+    
     # get meta data by id
     def get_meta_data(meta_id)
       call_soap_method(:get_meta_data,'//ns5:GetMetaDataResponse/MetaData', { 'MetaDataID' => meta_id })
@@ -315,19 +323,22 @@ module GranicusPlatformAPI
 
     #private
     
-    def call_soap_method(method,returnfilter,args={})
-      debug = @options[:debug]
+    def call_soap_method(method,returnfilter,args={},options={})
+      debug = options[:debug]
       @response = @client.request :wsdl, method do
         soap.namespaces['xmlns:granicus'] = "http://granicus.com/xsd"
         soap.namespaces['xmlns:SOAP-ENC'] = "http://schemas.xmlsoap.org/soap/encoding/"
         soap.body = prepare_hash args
-        if debug then
+        if debug
           puts soap.body
         end
       end
       
       doc = Nokogiri::XML(@response.to_xml) do |config|
         config.noblanks
+      end
+      if debug
+        puts doc
       end
       response = handle_response(doc.xpath(returnfilter, doc.root.namespaces)[0])
       if debug
@@ -345,6 +356,8 @@ module GranicusPlatformAPI
           new_hash[key] = prepare_hash value
         when 'Array'
           new_hash[key] = prepare_array value
+        when 'File'
+          new_hash[key] = Base64.encode64(value.read().force_encoding('BINARY'))
         else
           new_hash[key] = value
         end
