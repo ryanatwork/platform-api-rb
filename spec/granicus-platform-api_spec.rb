@@ -25,7 +25,7 @@ SERVER_ID        = fixtures["server_id"]
 
 # TODO: Delete then create an Event fixture here.
 
-client = GranicusPlatformAPI::Client.new GRANICUS_SITE, GRANICUS_LOGIN, GRANICUS_PASSWORD, {:proxy => 'http://localhost:8888'}
+client = GranicusPlatformAPI::Client.new GRANICUS_SITE, GRANICUS_LOGIN, GRANICUS_PASSWORD
 
 # The projects method
 describe GranicusPlatformAPI, "::Client.new" do
@@ -68,7 +68,7 @@ describe GranicusPlatformAPI, "::Client Camera Methods" do
 end
 
 describe GranicusPlatformAPI, "::Client Event Methods" do
-  it "should support CRUD operations" do
+  it "should support all CRUD operations" do
     # create
     event = GranicusPlatformAPI::EventData.new
     event.Name = "platform-api-rb unit test event"
@@ -84,6 +84,10 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     fetch_event.ID.should == event.ID
     fetch_event.Name.should == event.Name
     
+    # retrieve one by UID
+    uid_event = client.get_event_by_uid fetch_event.UID
+    uid_event.ID.should == event.ID
+    
     # retrieve many
     events = client.get_events
     found  = events.find { |e| e.ID == event.ID }
@@ -97,18 +101,12 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     # delete
     client.delete_event event.ID
   end
-
-  it "should have the NextStartDate and AgendaRolloverID fields" do
-    event = client.get_event EVENT_ID
-    event.NextStartDate.should_not == nil
-    event.AgendaRolloverID.should_not == nil
-    event.ECommentEnabled.should_not == nil
-  end
-
-  it "should import metadata" do
+  
+  it "should support metadata operations" do
     event        = client.get_event EVENT_ID
     event.UID    = ''
     new_event_id = client.create_event event
+    new_event = client.get_event new_event_id
     meta_arr        = []
     meta1           = GranicusPlatformAPI::MetaDataData.new
     meta1.Name      = 'test'
@@ -121,7 +119,25 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     keytable = client.import_event_meta_data new_event_id, meta_arr
     keytable[0].ForeignID.should == 1
     keytable[1].ForeignID.should == 2
+    
+    # fetch out the metadata and make sure it matches
+    meta_tree = client.get_event_meta_data new_event_id
+    meta_tree[0].ID.should == keytable[0].GranicusID
+    meta_tree[1].ID.should == keytable[1].GranicusID
+    
+    # fetch out the metadata by UID and make sure it matches
+    meta_tree = client.get_event_meta_data_by_uid new_event.UID
+    meta_tree[0].ID.should == keytable[0].GranicusID
+    meta_tree[1].ID.should == keytable[1].GranicusID
+    
     client.delete_event new_event_id
+  end
+
+  it "should have the NextStartDate and AgendaRolloverID fields" do
+    event = client.get_event EVENT_ID
+    event.NextStartDate.should_not == nil
+    event.AgendaRolloverID.should_not == nil
+    event.ECommentEnabled.should_not == nil
   end
 
   it "should get all events with matching foreign id" do
@@ -150,11 +166,6 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     event.ID.should == UPDATE_EVENT_ID
     event.Attendees[0].Name = 'my test'
     client.update_event event
-  end
-
-  it "should get the requested event by UID" do
-    event = client.get_event_by_uid EVENT_UID
-    event.UID.should == EVENT_UID
   end
 
   it "set the event agenda url" do
@@ -225,17 +236,6 @@ describe GranicusPlatformAPI, "::Client Clip Methods" do
 end
 
 describe GranicusPlatformAPI, "::Client MetaData Methods" do
-  it "should get an event's meta data" do
-    metadata = client.get_event_meta_data EVENT_ID
-    found = metadata.find { |m| m.ID == EVENT_META_ID }
-    found.should_not == nil
-  end
-
-  it "should get an event's meta data by UID" do
-    metadata = client.get_event_meta_data_by_uid EVENT_UID
-    found    = metadata.find { |m| m.ID == EVENT_META_ID }
-    found.should_not == nil
-  end
 
   it "should get a clip's meta data" do
     metadata = client.get_clip_meta_data CLIP_ID
