@@ -25,7 +25,7 @@ SERVER_ID        = fixtures["server_id"]
 
 # TODO: Delete then create an Event fixture here.
 
-client = GranicusPlatformAPI::Client.new GRANICUS_SITE, GRANICUS_LOGIN, GRANICUS_PASSWORD
+client = GranicusPlatformAPI::Client.new GRANICUS_SITE, GRANICUS_LOGIN, GRANICUS_PASSWORD, {:proxy => 'http://localhost:8888'}
 
 # The projects method
 describe GranicusPlatformAPI, "::Client.new" do
@@ -248,7 +248,7 @@ describe GranicusPlatformAPI, "::Client MetaData Methods" do
     metadata.ID = CLIP_META_ID
   end
   
-  it "should support uploading documents" do
+  it "should support uploading and downloading documents" do
     document    = GranicusPlatformAPI::Document.new
     document.Description = "My test document"
     document.FileContents = fixture('About Stacks.pdf')
@@ -258,8 +258,10 @@ describe GranicusPlatformAPI, "::Client MetaData Methods" do
     document_meta.ForeignID = 2
     document_meta.Payload = document
     document_meta.ParentID = CLIP_META_ID
-    puts document_meta
-    client.add_clip_meta_data CLIP_ID, document_meta
+    keymap = client.add_clip_meta_data CLIP_ID, document_meta
+    attachment = client.fetch_attachment keymap[0].GranicusID
+    attachment.FileExtension.should == document.FileExtension
+    attachment.FileContents.length.should == document.FileContents.size
   end
 
   it "should update the metadata" do

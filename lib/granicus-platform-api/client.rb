@@ -271,6 +271,11 @@ module GranicusPlatformAPI
         'MetaData' => meta_data},options)
     end
     
+    # fetch an attachment
+    def fetch_attachment(meta_id)
+      call_soap_method(:fetch_attachment,'//ns5:FetchAttachmentResponse/Attachment',{ 'MetaDataID' => meta_id })
+    end
+    
     # get meta data by id
     def get_meta_data(meta_id)
       call_soap_method(:get_meta_data,'//ns5:GetMetaDataResponse/MetaData', { 'MetaDataID' => meta_id })
