@@ -104,6 +104,7 @@ module GranicusPlatformAPI
     property :Status
     property :AgendaRolloverID
     property :ECommentEnabled
+    property :ECommentCloseOffset
   end
   
   class FolderData < Hashie::Dash
@@ -141,6 +142,7 @@ module GranicusPlatformAPI
     property :OrderID
     property :Payload
     property :Children
+    property :AllowComment
   end
   
   class Motion < Hashie::Dash
