@@ -38,6 +38,7 @@ module GranicusPlatformAPI
     self.typegenerators["ViewData"] = lambda { ViewData.new }
     self.typegenerators["VoteEntry"] = lambda { VoteEntry.new }
     self.typegenerators["VoteRecord"] = lambda { VoteRecord.new }
+    self.typegenerators["Setting"] = lambda { Setting.new }
     
     # classmap for generating proper attributes! hash within savon calls
     def self.classmap
@@ -324,6 +325,11 @@ module GranicusPlatformAPI
     # return the requested server
     def get_server(server_id)
       call_soap_method(:get_server,'//ns5:GetServerResponse/server',{ 'ServerID' => server_id })
+    end
+    
+    # get settings
+    def get_settings
+      call_soap_method(:get_settings,'//ns5:GetSettingsResponse/settings')
     end
 
     #private

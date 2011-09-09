@@ -130,6 +130,11 @@ module GranicusPlatformAPI
     property :GranicusID
   end
   
+  class Setting < Hashie::Dash
+    property :Name
+    property :Value
+  end
+  
   class MetaDataData < Hashie::Dash
     property :ID
     property :UID

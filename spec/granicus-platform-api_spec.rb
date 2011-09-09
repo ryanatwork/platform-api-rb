@@ -22,6 +22,7 @@ CLIP_META_ID     = fixtures["clip_meta_id"]
 CLIP_FOREIGN_ID  = fixtures["clip_foreign_id"]
 EVENT_FOREIGN_ID = fixtures["event_foreign_id"]
 SERVER_ID        = fixtures["server_id"]
+SITE_NAME        = fixtures["name"]
 
 # TODO: Delete then create an Event fixture here.
 
@@ -285,6 +286,19 @@ describe GranicusPlatformAPI, "::Client Server Methods" do
   it "should get the requested server" do
     server = client.get_server SERVER_ID
     server.ID.should == SERVER_ID
+  end
+end
+
+describe GranicusPlatformAPI, "::Settings Methods" do
+  it "should support getting settings" do
+    settings  = client.get_settings
+    found     = settings.find { |s| s.Name == "name" && s.Value == SITE_NAME }
+    found.should_not == nil
+  end
+  it "should not return database setting" do 
+    settings  = client.get_settings
+    found     = settings.find { |s| s.Name == "database" }
+    found.should == nil
   end
 end
 

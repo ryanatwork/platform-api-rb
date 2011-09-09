@@ -30,6 +30,7 @@ citizen.dev.granicus.com:
   server_id: 1
   
 dev.dev.granicus.com:
+    name: Dev Daily Build
     camera_id: 1
     folder_id: 1
     event_id: 813
