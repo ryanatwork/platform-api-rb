@@ -15,7 +15,6 @@
 <element name="PlayerTemplateID" type="xsd:int" />
 <element name="ArchiveStatus" type="xsd:string" />
 <element name="Duration" type="xsd:int" />
-
 <element name="Broadcast" type="xsd:boolean" />
 <element name="Record" type="xsd:boolean" />
 <element name="AutoStart" type="xsd:boolean" />
@@ -33,7 +32,6 @@
 <element name="AgendaPostedDate" type="xsd:dateTime" />
 <element name="NextStartDate" type="xsd:dateTime" />
 <element name="AgendaRolloverID" type="xsd:int" />
-
 <element name="ECommentEnabled" type="xsd:boolean" />
 <element name="ECommentCloseOffset" type="xsd:int" />
 </all>
@@ -51,7 +49,6 @@
 </all>
 </complexType>
 <complexType name="ClipData">
-
 <all>
 <element name="ID" type="xsd:int" />
 <element name="UID" type="xsd:string" />
@@ -69,7 +66,6 @@
 <element name="AgendaType" type="xsd:string" />
 <element name="AgendaFile" type="xsd:string" />
 <element name="Duration" type="xsd:int" />
-
 <element name="Status" type="xsd:string" />
 <element name="StartTime" type="xsd:dateTime" />
 <element name="LastModified" type="xsd:dateTime" />
@@ -87,7 +83,6 @@
 <complexType name="CameraData">
 <all>
 <element name="ID" type="xsd:int" />
-
 <element name="Type" type="xsd:string" />
 <element name="Name" type="xsd:string" />
 <element name="InternalIP" type="xsd:string" />
@@ -105,7 +100,6 @@
 <element name="Fullname" type="xsd:string" />
 <element name="Email" type="xsd:string" />
 <element name="CreatedDate" type="xsd:dateTime" />
-
 <element name="LastModified" type="xsd:dateTime" />
 </all>
 </complexType>
@@ -123,7 +117,6 @@
 <element name="Name" type="xsd:string" />
 <element name="Description" type="xsd:string" />
 <element name="Type" type="xsd:string" />
-
 <element name="LastModified" type="xsd:dateTime" />
 <element name="CreatedDate" type="xsd:dateTime" />
 </all>
@@ -141,7 +134,6 @@
 <element name="CreatedDate" type="xsd:dateTime" />
 </all>
 </complexType>
-
 <complexType name="ServerInterfaceData">
 <all>
 <element name="ID" type="xsd:int" />
@@ -159,7 +151,6 @@
 <element name="ID" type="xsd:int" />
 <element name="UID" type="xsd:string" />
 <element name="ParentID" type="xsd:int" />
-
 <element name="ParentUID" type="xsd:string" />
 <element name="ForeignID" type="xsd:int" />
 <element name="SourceID" type="xsd:int" />
@@ -177,7 +168,6 @@
 <element name="TimeStamp" type="xsd:long" />
 </all>
 </complexType>
-
 <complexType name="KeyMapping">
 <all>
 <element name="ForeignID" type="xsd:int" />
@@ -195,7 +185,6 @@
 <all>
 <element name="ID" type="xsd:int" />
 <element name="ForeignID" type="xsd:int" />
-
 <element name="Name" type="xsd:string" />
 <element name="IsActive" type="xsd:boolean" />
 <element name="Events" type="ns5:IntegerCollection" />
@@ -213,7 +202,6 @@
 <element name="XMLData" type="xsd:string" />
 </all>
 </complexType>
-
 <complexType name="TrainingChapter">
 <all>
 <element name="Subject" type="xsd:string" />
@@ -231,7 +219,6 @@
 <all>
 <element name="NoteText" type="xsd:string" />
 <element name="EditorsNotes" type="xsd:string" />
-
 <element name="Private" type="xsd:boolean" />
 </all>
 </complexType>
@@ -249,7 +236,6 @@
 </all>
 </complexType>
 <complexType name="Rollcall">
-
 <all>
 <element name="Attendees" type="ns5:AttendeeStatusCollection" />
 </all>
@@ -267,7 +253,6 @@
 <element name="Type" type="xsd:string" />
 <element name="MotionText" type="xsd:string" />
 </all>
-
 </complexType>
 <complexType name="Attendee">
 <all>
@@ -278,6 +263,12 @@
 <element name="Chair" type="xsd:boolean" />
 </all>
 </complexType>
+<complexType name="Setting">
+<all>
+<element name="Name" type="xsd:string" />
+<element name="Value" type="xsd:string" />
+</all>
+</complexType>
 <complexType name="VoteCollection">
 <complexContent>
 <restriction base="SOAP-ENC:Array">
@@ -285,7 +276,6 @@
 </restriction>
 </complexContent>
 </complexType>
-
 <complexType name="AttendeeStatusCollection">
 <complexContent>
 <restriction base="SOAP-ENC:Array">
@@ -303,7 +293,6 @@
 <complexType name="EventCollection">
 <complexContent>
 <restriction base="SOAP-ENC:Array">
-
 <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="ns5:EventData[]" />
 </restriction>
 </complexContent>
@@ -321,7 +310,6 @@
 <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="ns5:ClipData[]" />
 </restriction>
 </complexContent>
-
 </complexType>
 <complexType name="UserCollection">
 <complexContent>
@@ -339,7 +327,6 @@
 </complexType>
 <complexType name="TemplateCollection">
 <complexContent>
-
 <restriction base="SOAP-ENC:Array">
 <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="ns5:TemplateData[]" />
 </restriction>
@@ -357,7 +344,6 @@
 <restriction base="SOAP-ENC:Array">
 <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="ns5:Attendee[]" />
 </restriction>
-
 </complexContent>
 </complexType>
 <complexType name="MetaDataDataCollection">
@@ -375,7 +361,6 @@
 </complexContent>
 </complexType>
 <complexType name="StringCollection">
-
 <complexContent>
 <restriction base="SOAP-ENC:Array">
 <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
@@ -393,7 +378,13 @@
 <complexContent>
 <restriction base="SOAP-ENC:Array">
 <attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="ns5:ViewData[]" />
-
+</restriction>
+</complexContent>
+</complexType>
+<complexType name="SettingCollection">
+<complexContent>
+<restriction base="SOAP-ENC:Array">
+<attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="ns5:Setting[]" />
 </restriction>
 </complexContent>
 </complexType>
@@ -411,7 +402,6 @@
 <operation name="GetChallenge">
 <input message="tns:GetChallengeRequest" />
 <output message="tns:GetChallengeResponse" />
-
 </operation>
 <operation name="SendChallengeResponse">
 <input message="tns:SendChallengeResponseRequest" />
@@ -429,7 +419,6 @@
 <input message="tns:GetCamerasRequest" />
 <output message="tns:GetCamerasResponse" />
 </operation>
-
 <operation name="GetCamera">
 <input message="tns:GetCameraRequest" />
 <output message="tns:GetCameraResponse" />
@@ -447,7 +436,6 @@
 <output message="tns:DeleteCameraResponse" />
 </operation>
 <operation name="CreateEvent">
-
 <input message="tns:CreateEventRequest" />
 <output message="tns:CreateEventResponse" />
 </operation>
@@ -465,7 +453,6 @@
 </operation>
 <operation name="GetEventByUID">
 <input message="tns:GetEventByUIDRequest" />
-
 <output message="tns:GetEventByUIDResponse" />
 </operation>
 <operation name="GetEventVideoLocation">
@@ -483,7 +470,6 @@
 <operation name="GetEventMetaDataByUID">
 <input message="tns:GetEventMetaDataByUIDRequest" />
 <output message="tns:GetEventMetaDataByUIDResponse" />
-
 </operation>
 <operation name="SetEventAgendaURL">
 <input message="tns:SetEventAgendaURLRequest" />
@@ -501,7 +487,6 @@
 <input message="tns:DeleteEventRequest" />
 <output message="tns:DeleteEventResponse" />
 </operation>
-
 <operation name="AddEventMetaData">
 <input message="tns:AddEventMetaDataRequest" />
 <output message="tns:AddEventMetaDataResponse" />
@@ -519,7 +504,6 @@
 <output message="tns:GetFoldersResponse" />
 </operation>
 <operation name="GetFoldersByType">
-
 <input message="tns:GetFoldersByTypeRequest" />
 <output message="tns:GetFoldersByTypeResponse" />
 </operation>
@@ -537,7 +521,6 @@
 </operation>
 <operation name="RegisterClipUpload">
 <input message="tns:RegisterClipUploadRequest" />
-
 <output message="tns:RegisterClipUploadResponse" />
 </operation>
 <operation name="GetClips">
@@ -555,7 +538,6 @@
 <operation name="GetClipByUID">
 <input message="tns:GetClipByUIDRequest" />
 <output message="tns:GetClipByUIDResponse" />
-
 </operation>
 <operation name="GetClipVideoLocation">
 <input message="tns:GetClipVideoLocationRequest" />
@@ -573,7 +555,6 @@
 <input message="tns:GetClipIndicesRequest" />
 <output message="tns:GetClipIndicesResponse" />
 </operation>
-
 <operation name="GetClipIndicesByUID">
 <input message="tns:GetClipIndicesByUIDRequest" />
 <output message="tns:GetClipIndicesByUIDResponse" />
@@ -591,7 +572,6 @@
 <output message="tns:SetClipAgendaURLResponse" />
 </operation>
 <operation name="SetClipMinutesURL">
-
 <input message="tns:SetClipMinutesURLRequest" />
 <output message="tns:SetClipMinutesURLResponse" />
 </operation>
@@ -609,7 +589,6 @@
 </operation>
 <operation name="ImportClipMetaData">
 <input message="tns:ImportClipMetaDataRequest" />
-
 <output message="tns:ImportClipMetaDataResponse" />
 </operation>
 <operation name="GetMetaData">
@@ -627,7 +606,6 @@
 <operation name="UpdateMetaData">
 <input message="tns:UpdateMetaDataRequest" />
 <output message="tns:UpdateMetaDataResponse" />
-
 </operation>
 <operation name="DeleteMetaData">
 <input message="tns:DeleteMetaDataRequest" />
@@ -645,7 +623,6 @@
 <input message="tns:GetViewsRequest" />
 <output message="tns:GetViewsResponse" />
 </operation>
-
 <operation name="GetView">
 <input message="tns:GetViewRequest" />
 <output message="tns:GetViewResponse" />
@@ -663,7 +640,6 @@
 <output message="tns:GetCurrentUserIDResponse" />
 </operation>
 <operation name="GetCurrentUserLogon">
-
 <input message="tns:GetCurrentUserLogonRequest" />
 <output message="tns:GetCurrentUserLogonResponse" />
 </operation>
@@ -681,7 +657,6 @@
 </operation>
 <operation name="CreateGroup">
 <input message="tns:CreateGroupRequest" />
-
 <output message="tns:CreateGroupResponse" />
 </operation>
 <operation name="GetGroups">
@@ -699,7 +674,6 @@
 <operation name="CreateTemplate">
 <input message="tns:CreateTemplateRequest" />
 <output message="tns:CreateTemplateResponse" />
-
 </operation>
 <operation name="GetTemplates">
 <input message="tns:GetTemplatesRequest" />
@@ -717,7 +691,6 @@
 <input message="tns:CreateServerRequest" />
 <output message="tns:CreateServerResponse" />
 </operation>
-
 <operation name="GetServers">
 <input message="tns:GetServersRequest" />
 <output message="tns:GetServersResponse" />
@@ -735,9 +708,12 @@
 <output message="tns:GetPermissionLevelResponse" />
 </operation>
 <operation name="CreateClipGeneratedMinutesDocument">
-
 <input message="tns:CreateClipGeneratedMinutesDocumentRequest" />
 <output message="tns:CreateClipGeneratedMinutesDocumentResponse" />
+</operation>
+<operation name="GetSettings">
+<input message="tns:GetSettingsRequest" />
+<output message="tns:GetSettingsResponse" />
 </operation>
 </portType>
 <binding name="UserSDKBinding" type="tns:UserSDKPort">
@@ -753,7 +729,6 @@
 </operation>
 <operation name="Login">
 <soap:operation soapAction="urn:UserSDK#userwebservice#Login" />
-
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
@@ -771,7 +746,6 @@
 </output>
 </operation>
 <operation name="SendChallengeResponse">
-
 <soap:operation soapAction="urn:UserSDK#userwebservice#SendChallengeResponse" />
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -789,7 +763,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
-
 <operation name="CreateCamera">
 <soap:operation soapAction="urn:UserSDK#userwebservice#CreateCamera" />
 <input>
@@ -807,7 +780,6 @@
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
-
 </operation>
 <operation name="GetCamera">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetCamera" />
@@ -825,7 +797,6 @@
 </input>
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-
 </output>
 </operation>
 <operation name="UpdateCamera">
@@ -843,7 +814,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
-
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
@@ -861,7 +831,6 @@
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
-
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
@@ -879,7 +848,6 @@
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetEvent" />
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-
 </input>
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -897,7 +865,6 @@
 <operation name="GetEventVideoLocation">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetEventVideoLocation" />
 <input>
-
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
@@ -915,7 +882,6 @@
 </operation>
 <operation name="GetEventMetaData">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetEventMetaData" />
-
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
@@ -933,7 +899,6 @@
 </output>
 </operation>
 <operation name="SetEventAgendaURL">
-
 <soap:operation soapAction="urn:UserSDK#userwebservice#SetEventAgendaURL" />
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -951,7 +916,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
-
 <operation name="UpdateEvent">
 <soap:operation soapAction="urn:UserSDK#userwebservice#UpdateEvent" />
 <input>
@@ -969,7 +933,6 @@
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
-
 </operation>
 <operation name="AddEventMetaData">
 <soap:operation soapAction="urn:UserSDK#userwebservice#AddEventMetaData" />
@@ -987,7 +950,6 @@
 </input>
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-
 </output>
 </operation>
 <operation name="CreateFolder">
@@ -1005,7 +967,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
-
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
@@ -1023,7 +984,6 @@
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
-
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
@@ -1041,7 +1001,6 @@
 <soap:operation soapAction="urn:UserSDK#userwebservice#UpdateFolder" />
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-
 </input>
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -1059,7 +1018,6 @@
 <operation name="GetClips">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetClips" />
 <input>
-
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
@@ -1077,7 +1035,6 @@
 </operation>
 <operation name="GetClip">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetClip" />
-
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
@@ -1095,7 +1052,6 @@
 </output>
 </operation>
 <operation name="GetClipVideoLocation">
-
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetClipVideoLocation" />
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -1113,7 +1069,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
-
 <operation name="GetClipMetaDataByUID">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetClipMetaDataByUID" />
 <input>
@@ -1131,7 +1086,6 @@
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
-
 </operation>
 <operation name="GetClipIndicesByUID">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetClipIndicesByUID" />
@@ -1149,7 +1103,6 @@
 </input>
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-
 </output>
 </operation>
 <operation name="GetClipCaptionsByUID">
@@ -1167,7 +1120,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
-
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
@@ -1185,7 +1137,6 @@
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
-
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
@@ -1203,7 +1154,6 @@
 <soap:operation soapAction="urn:UserSDK#userwebservice#AddClipMetaData" />
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-
 </input>
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -1221,7 +1171,6 @@
 <operation name="GetMetaData">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetMetaData" />
 <input>
-
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
@@ -1239,7 +1188,6 @@
 </operation>
 <operation name="GetMetaDataVideoLocation">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetMetaDataVideoLocation" />
-
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
@@ -1257,7 +1205,6 @@
 </output>
 </operation>
 <operation name="DeleteMetaData">
-
 <soap:operation soapAction="urn:UserSDK#userwebservice#DeleteMetaData" />
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -1275,7 +1222,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
-
 <operation name="CreateView">
 <soap:operation soapAction="urn:UserSDK#userwebservice#CreateView" />
 <input>
@@ -1293,7 +1239,6 @@
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
-
 </operation>
 <operation name="GetView">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetView" />
@@ -1311,7 +1256,6 @@
 </input>
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-
 </output>
 </operation>
 <operation name="CreateUser">
@@ -1329,7 +1273,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
-
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
@@ -1347,7 +1290,6 @@
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
-
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
@@ -1365,7 +1307,6 @@
 <soap:operation soapAction="urn:UserSDK#userwebservice#UpdateUser" />
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-
 </input>
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -1383,7 +1324,6 @@
 <operation name="GetGroups">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetGroups" />
 <input>
-
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
@@ -1401,7 +1341,6 @@
 </operation>
 <operation name="UpdateGroup">
 <soap:operation soapAction="urn:UserSDK#userwebservice#UpdateGroup" />
-
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
@@ -1419,7 +1358,6 @@
 </output>
 </operation>
 <operation name="GetTemplates">
-
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetTemplates" />
 <input>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -1437,7 +1375,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
-
 <operation name="UpdateTemplate">
 <soap:operation soapAction="urn:UserSDK#userwebservice#UpdateTemplate" />
 <input>
@@ -1455,7 +1392,6 @@
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
-
 </operation>
 <operation name="GetServers">
 <soap:operation soapAction="urn:UserSDK#userwebservice#GetServers" />
@@ -1473,7 +1409,6 @@
 </input>
 <output>
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-
 </output>
 </operation>
 <operation name="UpdateServer">
@@ -1491,7 +1426,6 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </input>
 <output>
-
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
@@ -1504,12 +1438,20 @@
 <soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
 </output>
 </operation>
+<operation name="GetSettings">
+<soap:operation soapAction="urn:UserSDK#userwebservice#GetSettings" />
+<input>
+<soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</input>
+<output>
+<soap:body use="encoded" namespace="urn:UserSDK" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+</output>
+</operation>
 </binding>
 <service name="UserSDKService">
 <documentation />
 <port name="UserSDKPort" binding="tns:UserSDKBinding">
 <soap:address location="http://dev.dev.granicus.com/SDK/User/index.php" />
-
 </port>
 </service>
 <message name="LogMessageRequest">
@@ -1527,7 +1469,6 @@
 </message>
 <message name="LoginResponse" />
 <message name="GetChallengeRequest">
-
 <part name="ChallengeCode" type="xsd:string" />
 </message>
 <message name="GetChallengeResponse">
@@ -1545,7 +1486,6 @@
 </message>
 <message name="CreateCameraResponse">
 <part name="CameraID" type="xsd:int" />
-
 </message>
 <message name="GetCamerasRequest" />
 <message name="GetCamerasResponse">
@@ -1563,7 +1503,6 @@
 <message name="GetCameraVideoLocationResponse">
 <part name="url" type="xsd:string" />
 </message>
-
 <message name="UpdateCameraRequest">
 <part name="camera" type="ns5:CameraData" />
 </message>
@@ -1581,7 +1520,6 @@
 <message name="GetEventsRequest" />
 <message name="GetEventsResponse">
 <part name="events" type="ns5:EventCollection" />
-
 </message>
 <message name="GetEventsByForeignIDRequest">
 <part name="ForeignID" type="xsd:int" />
@@ -1599,7 +1537,6 @@
 <part name="EventUID" type="xsd:string" />
 </message>
 <message name="GetEventByUIDResponse">
-
 <part name="event" type="ns5:EventData" />
 </message>
 <message name="GetEventVideoLocationRequest">
@@ -1617,7 +1554,6 @@
 <message name="GetEventMetaDataRequest">
 <part name="EventID" type="xsd:int" />
 </message>
-
 <message name="GetEventMetaDataResponse">
 <part name="metadata" type="ns5:MetaDataDataCollection" />
 </message>
@@ -1635,7 +1571,6 @@
 <message name="SetEventAgendaURLByUIDRequest">
 <part name="EventUID" type="xsd:string" />
 <part name="URL" type="xsd:string" />
-
 </message>
 <message name="SetEventAgendaURLByUIDResponse" />
 <message name="UpdateEventRequest">
@@ -1653,7 +1588,6 @@
 <message name="AddEventMetaDataResponse">
 <part name="KeyTable" type="ns5:KeyTable" />
 </message>
-
 <message name="ImportEventMetaDataRequest">
 <part name="EventID" type="xsd:int" />
 <part name="MetaData" type="ns5:MetaDataDataCollection" />
@@ -1671,7 +1605,6 @@
 </message>
 <message name="GetFoldersRequest" />
 <message name="GetFoldersResponse">
-
 <part name="folders" type="ns5:FolderCollection" />
 </message>
 <message name="GetFoldersByTypeRequest">
@@ -1689,7 +1622,6 @@
 <message name="GetFolderUploadInterfaceRequest">
 <part name="FolderID" type="xsd:int" />
 </message>
-
 <message name="GetFolderUploadInterfaceResponse">
 <part name="interface" type="ns5:ServerInterfaceData" />
 </message>
@@ -1707,7 +1639,6 @@
 <message name="GetClipsRequest">
 <part name="FolderID" type="xsd:int" />
 </message>
-
 <message name="GetClipsResponse">
 <part name="clips" type="ns5:ClipCollection" />
 </message>
@@ -1725,7 +1656,6 @@
 </message>
 <message name="GetClipByUIDRequest">
 <part name="ClipUID" type="xsd:string" />
-
 </message>
 <message name="GetClipByUIDResponse">
 <part name="clip" type="ns5:ClipData" />
@@ -1743,7 +1673,6 @@
 <part name="metadata" type="ns5:MetaDataDataCollection" />
 </message>
 <message name="GetClipMetaDataByUIDRequest">
-
 <part name="ClipUID" type="xsd:string" />
 </message>
 <message name="GetClipMetaDataByUIDResponse">
@@ -1761,7 +1690,6 @@
 <message name="GetClipIndicesByUIDResponse">
 <part name="metadata" type="ns5:MetaDataDataCollection" />
 </message>
-
 <message name="GetClipCaptionsRequest">
 <part name="ClipID" type="xsd:int" />
 </message>
@@ -1779,7 +1707,6 @@
 <part name="URL" type="xsd:string" />
 </message>
 <message name="SetClipAgendaURLResponse" />
-
 <message name="SetClipMinutesURLRequest">
 <part name="ClipID" type="xsd:int" />
 <part name="URL" type="xsd:string" />
@@ -1797,7 +1724,6 @@
 <part name="ClipID" type="xsd:int" />
 <part name="MetaDataData" type="ns5:MetaDataData" />
 </message>
-
 <message name="AddClipMetaDataResponse">
 <part name="KeyTable" type="ns5:KeyTable" />
 </message>
@@ -1815,7 +1741,6 @@
 </message>
 <message name="GetMetaDataResponse">
 <part name="MetaData" type="ns5:MetaDataData" />
-
 </message>
 <message name="GetMetaDataByUIDRequest">
 <part name="MetaDataUID" type="xsd:string" />
@@ -1833,7 +1758,6 @@
 <part name="MetaData" type="ns5:MetaDataData" />
 </message>
 <message name="UpdateMetaDataResponse" />
-
 <message name="DeleteMetaDataRequest">
 <part name="MetaDataID" type="xsd:int" />
 </message>
@@ -1851,7 +1775,6 @@
 <part name="ViewID" type="xsd:int" />
 </message>
 <message name="GetViewsRequest" />
-
 <message name="GetViewsResponse">
 <part name="views" type="ns5:ViewCollection" />
 </message>
@@ -1869,7 +1792,6 @@
 <part name="UserData" type="ns5:UserData" />
 </message>
 <message name="CreateUserResponse">
-
 <part name="UserID" type="xsd:int" />
 </message>
 <message name="GetCurrentUserIDRequest" />
@@ -1887,7 +1809,6 @@
 <message name="GetUserRequest">
 <part name="UserID" type="xsd:int" />
 </message>
-
 <message name="GetUserResponse">
 <part name="user" type="ns5:UserData" />
 </message>
@@ -1905,7 +1826,6 @@
 <message name="GetGroupsResponse">
 <part name="groups" type="ns5:GroupCollection" />
 </message>
-
 <message name="GetGroupRequest">
 <part name="GroupID" type="xsd:int" />
 </message>
@@ -1923,7 +1843,6 @@
 <part name="TemplateID" type="xsd:int" />
 </message>
 <message name="GetTemplatesRequest" />
-
 <message name="GetTemplatesResponse">
 <part name="templates" type="ns5:TemplateCollection" />
 </message>
@@ -1941,7 +1860,6 @@
 <part name="ServerData" type="ns5:ServerData" />
 </message>
 <message name="CreateServerResponse">
-
 <part name="ServerID" type="xsd:int" />
 </message>
 <message name="GetServersRequest" />
@@ -1959,7 +1877,6 @@
 </message>
 <message name="UpdateServerResponse" />
 <message name="GetPermissionLevelRequest">
-
 <part name="AssetType" type="xsd:string" />
 <part name="AssetID" type="xsd:int" />
 </message>
@@ -1974,4 +1891,8 @@
 <part name="isDefault" type="xsd:boolean" />
 </message>
 <message name="CreateClipGeneratedMinutesDocumentResponse" />
+<message name="GetSettingsRequest" />
+<message name="GetSettingsResponse">
+<part name="settings" type="ns5:SettingCollection" />
+</message>
 </definitions>
