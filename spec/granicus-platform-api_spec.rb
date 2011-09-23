@@ -1,11 +1,14 @@
 require 'helper'
 
-# these environment variables are required to be set on the system
 GRANICUS_SITE     = ENV['GRANICUS_SITE']
 GRANICUS_LOGIN    = ENV['GRANICUS_LOGIN']
 GRANICUS_PASSWORD = ENV['GRANICUS_PASSWORD']
 
-# grab different fixtures, based on the GRANICUS_SITE environment variable
+unless GRANICUS_SITE && GRANICUS_LOGIN && GRANICUS_PASSWORD
+  raise "The environment variables GRANICUS_SITE, GRANICUS_LOGIN, GRANICUS_PASSWORD are required to be set on the system"
+end
+
+# load fixtures based on the GRANICUS_SITE environment variable
 fixtures = YAML.load(ERB.new(File.new(File.dirname(__FILE__) + '/fixtures/fixtures.yml').read).result)[GRANICUS_SITE]
 
 CAMERA_ID        = fixtures["camera_id"]
@@ -71,24 +74,24 @@ end
 describe GranicusPlatformAPI, "::Client Event Methods" do
   it "should support all CRUD operations" do
     # create
-    event = GranicusPlatformAPI::EventData.new
-    event.Name = "platform-api-rb unit test event"
+    event           = GranicusPlatformAPI::EventData.new
+    event.Name      = "platform-api-rb unit test event"
     event.StartTime = Time.now() - 300
-    event.Duration = 3600
-    event.FolderID = client.get_folders()[0].ID
-    event.CameraID = client.get_cameras()[0].ID
-    
+    event.Duration  = 3600
+    event.FolderID  = client.get_folders()[0].ID
+    event.CameraID  = client.get_cameras()[0].ID
+
     event.ID = client.create_event event
-    
+
     # retrieve one
     fetch_event = client.get_event event.ID
     fetch_event.ID.should == event.ID
     fetch_event.Name.should == event.Name
-    
+
     # retrieve one by UID
     uid_event = client.get_event_by_uid fetch_event.UID
     uid_event.ID.should == event.ID
-    
+
     # retrieve many
     events = client.get_events
     found  = events.find { |e| e.ID == event.ID }
@@ -98,16 +101,16 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     fetch_event = client.get_event event.ID
     fetch_event.ID.should == event.ID
     fetch_event.Name.should == event.Name
-    
+
     # delete
     client.delete_event event.ID
   end
-  
+
   it "should support metadata operations" do
-    event        = client.get_event EVENT_ID
-    event.UID    = ''
-    new_event_id = client.create_event event
-    new_event = client.get_event new_event_id
+    event           = client.get_event EVENT_ID
+    event.UID       = ''
+    new_event_id    = client.create_event event
+    new_event       = client.get_event new_event_id
     meta_arr        = []
     meta1           = GranicusPlatformAPI::MetaDataData.new
     meta1.Name      = 'test'
@@ -120,17 +123,17 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     keytable = client.import_event_meta_data new_event_id, meta_arr
     keytable[0].ForeignID.should == 1
     keytable[1].ForeignID.should == 2
-    
+
     # fetch out the metadata and make sure it matches
     meta_tree = client.get_event_meta_data new_event_id
     meta_tree[0].ID.should == keytable[0].GranicusID
     meta_tree[1].ID.should == keytable[1].GranicusID
-    
+
     # fetch out the metadata by UID and make sure it matches
     meta_tree = client.get_event_meta_data_by_uid new_event.UID
     meta_tree[0].ID.should == keytable[0].GranicusID
     meta_tree[1].ID.should == keytable[1].GranicusID
-    
+
     client.delete_event new_event_id
   end
 
@@ -171,6 +174,18 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
 
   it "set the event agenda url" do
     event = client.set_event_agenda_url EVENT_ID, "http://github.com/gov20cto/granicus-platform-api"
+  end
+end
+
+describe GranicusPlatformAPI, "::EComment Methods" do
+  it "should get ecomments by id" do
+    comments = client.get_ecomments_by_event_id(811)
+    comments.length.should == 1
+  end
+
+  it "should get ecomments by agenda item uid" do
+    comments = client.get_ecomments_by_agenda_id("sajdfklsdjafklsdjaklfsdkalfjsdkla;j")
+    comments.length.should == 1
   end
 end
 
@@ -248,19 +263,19 @@ describe GranicusPlatformAPI, "::Client MetaData Methods" do
     metadata    = client.get_meta_data CLIP_META_ID
     metadata.ID = CLIP_META_ID
   end
-  
+
   it "should support uploading and downloading documents" do
-    document    = GranicusPlatformAPI::Document.new
-    document.Description = "My test document"
-    document.FileContents = fixture('About Stacks.pdf')
-    document.FileExtension = document.FileContents.path.split('.').last
-    document_meta = GranicusPlatformAPI::MetaDataData.new
-    document_meta.Name = 'test doc'
+    document                = GranicusPlatformAPI::Document.new
+    document.Description    = "My test document"
+    document.FileContents   = fixture('About Stacks.pdf')
+    document.FileExtension  = document.FileContents.path.split('.').last
+    document_meta           = GranicusPlatformAPI::MetaDataData.new
+    document_meta.Name      = 'test doc'
     document_meta.ForeignID = 2
-    document_meta.Payload = document
-    document_meta.ParentID = CLIP_META_ID
-    keymap = client.add_clip_meta_data CLIP_ID, document_meta
-    attachment = client.fetch_attachment keymap[0].GranicusID
+    document_meta.Payload   = document
+    document_meta.ParentID  = CLIP_META_ID
+    keymap                  = client.add_clip_meta_data CLIP_ID, document_meta
+    attachment              = client.fetch_attachment keymap[0].GranicusID
     attachment.FileExtension.should == document.FileExtension
     attachment.FileContents.length.should == document.FileContents.size
   end
@@ -291,13 +306,13 @@ end
 
 describe GranicusPlatformAPI, "::Settings Methods" do
   it "should support getting settings" do
-    settings  = client.get_settings
-    found     = settings.find { |s| s.Name == "name" && s.Value == SITE_NAME }
+    settings = client.get_settings
+    found    = settings.find { |s| s.Name == "name" && s.Value == SITE_NAME }
     found.should_not == nil
   end
-  it "should not return database setting" do 
-    settings  = client.get_settings
-    found     = settings.find { |s| s.Name == "database" }
+  it "should not return database setting" do
+    settings = client.get_settings
+    found    = settings.find { |s| s.Name == "database" }
     found.should == nil
   end
 end

@@ -69,8 +69,6 @@ module GranicusPlatformAPI
   class Document < Hashie::Dash
     property :Description
     property :Location
-    property :FileContents
-    property :FileExtension
   end
   
   class EventData < Hashie::Dash
@@ -80,6 +78,7 @@ module GranicusPlatformAPI
     property :Name
     property :CameraID
     property :FolderID
+    property :Status
     property :AgendaType
     property :AgendaFile
     property :PlayerTemplateID
@@ -101,7 +100,6 @@ module GranicusPlatformAPI
     property :MeetingTime
     property :AgendaPostedDate
     property :NextStartDate
-    property :Status
     property :AgendaRolloverID
     property :ECommentEnabled
     property :ECommentCloseOffset
@@ -130,11 +128,6 @@ module GranicusPlatformAPI
     property :GranicusID
   end
   
-  class Setting < Hashie::Dash
-    property :Name
-    property :Value
-  end
-  
   class MetaDataData < Hashie::Dash
     property :ID
     property :UID
@@ -145,11 +138,26 @@ module GranicusPlatformAPI
     property :Name
     property :TimeStamp
     property :OrderID
+    property :AllowComment
     property :Payload
     property :Children
-    property :AllowComment
   end
-  
+
+  class EComment < Hashie::Dash
+    property :FirstName
+    property :LastName
+    property :CommentText
+    property :Email
+    property :Address
+    property :City
+    property :State
+    property :Zip
+    property :Area
+    property :ECommentPositionID
+    property :HasVideoComment
+    property :CreatedStamp
+  end
+
   class Motion < Hashie::Dash
     property :Mover
     property :Seconder
