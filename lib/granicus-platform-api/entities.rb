@@ -69,6 +69,8 @@ module GranicusPlatformAPI
   class Document < Hashie::Dash
     property :Description
     property :Location
+    property :FileContents
+    property :FileExtension
   end
   
   class EventData < Hashie::Dash
@@ -196,6 +198,11 @@ module GranicusPlatformAPI
     property :Directory
     property :ReplicationUN
     property :ReplicationPW
+  end
+
+  class Setting < Hashie::Dash
+    property :Name
+    property :Value
   end
   
   class TemplateData < Hashie::Dash

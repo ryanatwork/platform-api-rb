@@ -9,25 +9,24 @@ unless GRANICUS_SITE && GRANICUS_LOGIN && GRANICUS_PASSWORD
 end
 
 # load fixtures based on the GRANICUS_SITE environment variable
-fixtures = YAML.load(ERB.new(File.new(File.dirname(__FILE__) + '/fixtures/fixtures.yml').read).result)[GRANICUS_SITE]
+fixtures      = YAML.load(ERB.new(File.new(File.dirname(__FILE__) + '/fixtures/fixtures.yml').read).result)
+site_settings = fixtures[GRANICUS_SITE]
+CAMERA        = fixtures["camera"]
+EVENT         = fixtures["event"]
 
-CAMERA_ID        = fixtures["camera_id"]
-FOLDER_ID        = fixtures["folder_id"]
-EVENT_ID         = fixtures["event_id"]
-EVENT_UID        = fixtures["event_uid"]
-IMPORT_EVENT_ID  = fixtures["import_event_id"]
-UPDATE_EVENT_ID  = fixtures["update_event_id"]
-EVENT_META_ID    = fixtures["event_meta_id"]
-CLIP_ID          = fixtures["clip_id"]
-IMPORT_CLIP_ID   = fixtures["import_clip_id"]
-CLIP_UID         = fixtures["clip_uid"]
-CLIP_META_ID     = fixtures["clip_meta_id"]
-CLIP_FOREIGN_ID  = fixtures["clip_foreign_id"]
-EVENT_FOREIGN_ID = fixtures["event_foreign_id"]
-SERVER_ID        = fixtures["server_id"]
-SITE_NAME        = fixtures["name"]
-
-# TODO: Delete then create an Event fixture here.
+CAMERA_ID        = site_settings["camera_id"]
+FOLDER_ID        = site_settings["folder_id"]
+IMPORT_EVENT_ID  = site_settings["import_event_id"]
+UPDATE_EVENT_ID  = site_settings["update_event_id"]
+EVENT_META_ID    = site_settings["event_meta_id"]
+CLIP_ID          = site_settings["clip_id"]
+IMPORT_CLIP_ID   = site_settings["import_clip_id"]
+CLIP_UID         = site_settings["clip_uid"]
+CLIP_META_ID     = site_settings["clip_meta_id"]
+CLIP_FOREIGN_ID  = site_settings["clip_foreign_id"]
+EVENT_FOREIGN_ID = site_settings["event_foreign_id"]
+SERVER_ID        = site_settings["server_id"]
+SITE_NAME        = site_settings["name"]
 
 client = GranicusPlatformAPI::Client.new GRANICUS_SITE, GRANICUS_LOGIN, GRANICUS_PASSWORD
 
@@ -53,61 +52,101 @@ describe GranicusPlatformAPI, "::Client.new" do
 end
 
 describe GranicusPlatformAPI, "::Client Camera Methods" do
-  it "should get my cameras" do
+  before do
+    camera               = GranicusPlatformAPI::CameraData.new
+    camera.BroadcastPort = CAMERA["BroadcastPort"]
+    camera.Type          = CAMERA["Type"]
+    camera.ControlPort   = CAMERA["ControlPort"]
+    camera.ExternalIP    = CAMERA["ExternalIP"]
+    camera.Identifier    = CAMERA["Identifier"]
+    camera.InternalIP    = CAMERA["InternalIP"]
+    camera.Name          = CAMERA["Name"]
+    @new_camera_id       = client.create_camera camera
+    @camera              = client.get_camera(@new_camera_id)
+  end
+
+  it "should create a camera" do
+    @new_camera_id.should_not == nil
+  end
+
+  it "should get a camera" do
+    @camera.should_not == nil
+  end
+
+  it "should get all cameras" do
     cameras = client.get_cameras
-    found   = cameras.find { |c| c.ID == CAMERA_ID }
+    found   = cameras.find { |c| c.ID == @camera.ID }
     found.should_not == nil
   end
 
-  it "should create, retrieve, update and delete a camera" do
-    camera        = client.get_camera CAMERA_ID
-    new_camera_id = client.create_camera camera
-    camera2       = client.get_camera new_camera_id
-    camera2.Name  = 'test my new camera'
+  it "should retrieve and update a camera" do
+    camera2      = client.get_camera @camera.ID
+    camera2.Name = 'test my new camera'
     client.update_camera camera2
-    camera3 = client.get_camera new_camera_id
+
+    camera3 = client.get_camera @camera.ID
     camera3.Name.should == 'test my new camera'
-    client.delete_camera new_camera_id
   end
+
+  it "should delete a camera" do
+    client.delete_camera @camera.ID
+  end
+
 end
 
 describe GranicusPlatformAPI, "::Client Event Methods" do
-  it "should support all CRUD operations" do
-    # create
-    event           = GranicusPlatformAPI::EventData.new
-    event.Name      = "platform-api-rb unit test event"
-    event.StartTime = Time.now() - 300
-    event.Duration  = 3600
-    event.FolderID  = client.get_folders()[0].ID
-    event.CameraID  = client.get_cameras()[0].ID
+  before do
+    event                     = GranicusPlatformAPI::EventData.new
+    event.Name                = EVENT["Name"]
+    event.Duration            = EVENT["Duration"]
+    event.FolderID            = EVENT["FolderID"]
+    event.CameraID            = EVENT["CameraID"]
+    event.AgendaRolloverID    = EVENT["AgendaRolloverID"]
+    event.ECommentEnabled     = EVENT["ECommentEnabled"]
+    event.AgendaPostedDate    = EVENT["AgendaPostedDate"]
+    event.Attendees           = []
+    event.ECommentCloseOffset = EVENT["ECommentCloseOffset"]
+    event.StartTime           = Time.now() - 300
+    event.FolderID            = client.get_folders()[0].ID
+    event.CameraID            = client.get_cameras()[0].ID
+    @new_event_id             = client.create_event event
+    @event                    = client.get_event @new_event_id
+  end
 
-    event.ID = client.create_event event
+  it "should create an event" do
+    @new_event_id.should_not == nil
+  end
 
+  it "should get an event by ID" do
     # retrieve one
-    fetch_event = client.get_event event.ID
-    fetch_event.ID.should == event.ID
-    fetch_event.Name.should == event.Name
+    @event.should_not == nil
+  end
 
+  it "should get an event by UID" do
     # retrieve one by UID
-    uid_event = client.get_event_by_uid fetch_event.UID
-    uid_event.ID.should == event.ID
+    event = client.get_event_by_uid @event.UID
+    event.ID.should == @event.ID
+  end
 
+  it "should get all events" do
     # retrieve many
     events = client.get_events
-    found  = events.find { |e| e.ID == event.ID }
-    # update
-    event.Name = 'platform-api-rb unit test event updated'
-    client.update_event event
-    fetch_event = client.get_event event.ID
-    fetch_event.ID.should == event.ID
-    fetch_event.Name.should == event.Name
+    found  = events.find { |e| e.ID == @event.ID }
+    found.should_not == nil
+  end
 
-    # delete
-    client.delete_event event.ID
+  it "should be updatedable" do
+    # update
+    event      = client.get_event @event.ID
+    event.Name = 'platform-api-rb unit test event updated'
+    client.update_event(event)
+
+    event2 = client.get_event @event.ID
+    event2.Name.should == 'platform-api-rb unit test event updated'
   end
 
   it "should support metadata operations" do
-    event           = client.get_event EVENT_ID
+    event           = client.get_event @event.ID
     event.UID       = ''
     new_event_id    = client.create_event event
     new_event       = client.get_event new_event_id
@@ -138,7 +177,7 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
   end
 
   it "should have the NextStartDate and AgendaRolloverID fields" do
-    event = client.get_event EVENT_ID
+    event = client.get_event @event.ID
     event.NextStartDate.should_not == nil
     event.AgendaRolloverID.should_not == nil
     event.ECommentEnabled.should_not == nil
@@ -152,40 +191,45 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
   end
 
   it "should update a simple property on requested event" do
-    event = client.get_event UPDATE_EVENT_ID
-    event.ID.should == UPDATE_EVENT_ID
+    event = client.get_event @event.ID
+    event.ID.should == @event.ID
     event.Name = 'my test'
     client.update_event event
   end
 
   it "should add a complex property on requested event" do
-    event = client.get_event UPDATE_EVENT_ID
-    event.ID.should == UPDATE_EVENT_ID
+    event = client.get_event @event.ID
+    event.ID.should == @event.ID
     event.Attendees << {'Name' => "Foo Fighters", 'Voting' => true, 'Chair' => true}
     client.update_event event
   end
 
   it "should update a complex property on requested event" do
-    event = client.get_event UPDATE_EVENT_ID
-    event.ID.should == UPDATE_EVENT_ID
+    event = client.get_event @event.ID
+    event.ID.should == @event.ID
     event.Attendees[0].Name = 'my test'
     client.update_event event
   end
 
   it "set the event agenda url" do
-    event = client.set_event_agenda_url EVENT_ID, "http://github.com/gov20cto/granicus-platform-api"
+    client.set_event_agenda_url @event.ID, "http://github.com/gov20cto/granicus-platform-api"
   end
+
+  it "should be deletable" do
+    client.delete_event @event.ID
+  end
+
 end
 
 describe GranicusPlatformAPI, "::EComment Methods" do
-  it "should get ecomments by id" do
+  it "should get ecomments by event id" do
     comments = client.get_ecomments_by_event_id(811)
-    comments.length.should == 1
+    comments.should be_kind_of(Array)
   end
 
   it "should get ecomments by agenda item uid" do
-    comments = client.get_ecomments_by_agenda_id("sajdfklsdjafklsdjaklfsdkalfjsdkla;j")
-    comments.length.should == 1
+    comments = client.get_ecomments_by_agenda_item_uid("42a8238d-7638-102e-bb2d-9326039e1073")
+    comments.should be_kind_of(Array)
   end
 end
 
