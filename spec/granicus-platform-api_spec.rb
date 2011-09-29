@@ -92,6 +92,10 @@ describe GranicusPlatformAPI, "::Client Camera Methods" do
     client.delete_camera @camera.ID
   end
 
+  after do
+    client.delete_camera @camera.ID
+  end
+
 end
 
 describe GranicusPlatformAPI, "::Client Event Methods" do
@@ -200,22 +204,44 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
   it "should add a complex property on requested event" do
     event = client.get_event @event.ID
     event.ID.should == @event.ID
-    event.Attendees << {'Name' => "Foo Fighters", 'Voting' => true, 'Chair' => true}
+    att1        = GranicusPlatformAPI::Attendee.new
+    att1.Name   = 'Foo Fighters'
+    att1.Voting = true
+    att1.Chair  = true
+    event.Attendees << att1
     client.update_event event
   end
 
   it "should update a complex property on requested event" do
+    # create
     event = client.get_event @event.ID
     event.ID.should == @event.ID
-    event.Attendees[0].Name = 'my test'
+    att1        = GranicusPlatformAPI::Attendee.new
+    att1.Name   = 'Foo Fighters'
+    att1.Voting = true
+    att1.Chair  = true
+    event.Attendees << att1
     client.update_event event
+
+    # update
+    event                   = client.get_event @event.ID
+    event.Attendees[0].Name = 'Nirvana'
+    client.update_event event
+
+    event = client.get_event @event.ID
+    event.ID.should == @event.ID
+    event.Attendees[0].Name.should == 'Nirvana'
   end
 
   it "set the event agenda url" do
     client.set_event_agenda_url @event.ID, "http://github.com/gov20cto/granicus-platform-api"
   end
 
-  it "should be deletable" do
+  it "should delete event" do
+    client.delete_event @event.ID
+  end
+
+  after do
     client.delete_event @event.ID
   end
 
