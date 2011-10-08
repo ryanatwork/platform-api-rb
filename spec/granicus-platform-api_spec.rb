@@ -292,6 +292,7 @@ end
 describe GranicusPlatformAPI, "::Settings Methods" do
   it "should support getting settings" do
     settings  = client.get_settings
+    puts settings
     found     = settings.find { |s| s.Name == "name" && s.Value == SITE_NAME }
     found.should_not == nil
   end

@@ -30,7 +30,7 @@ This wrapper is developed against 1.9.2.
 
 = License
 
-Copyright (c) 2011 Javier Muniz
+Copyright (c) 2011 Granicus, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -56,4 +56,4 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 = Credits
 
-Javier Muniz
+Javier Muniz, Ryan Wold
