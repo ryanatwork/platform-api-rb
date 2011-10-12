@@ -105,7 +105,6 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     event.Duration            = EVENT["Duration"]
     event.FolderID            = EVENT["FolderID"]
     event.CameraID            = EVENT["CameraID"]
-    event.AgendaRolloverID    = EVENT["AgendaRolloverID"]
     event.ECommentEnabled     = EVENT["ECommentEnabled"]
     event.AgendaPostedDate    = EVENT["AgendaPostedDate"]
     event.Attendees           = []
@@ -180,10 +179,9 @@ describe GranicusPlatformAPI, "::Client Event Methods" do
     client.delete_event new_event_id
   end
 
-  it "should have the NextStartDate and AgendaRolloverID fields" do
+  it "should have the EComment-specific fields" do
     event = client.get_event @event.ID
     event.NextStartDate.should_not == nil
-    event.AgendaRolloverID.should_not == nil
     event.ECommentEnabled.should_not == nil
   end
 
