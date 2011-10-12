@@ -59,7 +59,6 @@ event:
   Duration: 3600
   FolderID: 7
   CameraID: 100
-  AgendaRolloverID: 2
   ECommentEnabled: 1
   AgendaPostedDate: "2011-09-01 00:00:00"
   ECommentCloseOffset: 60
