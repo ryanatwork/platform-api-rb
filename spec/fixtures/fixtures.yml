@@ -50,7 +50,7 @@ camera:
   Type: "Meeting"
   ControlPort: 80
   ExternalIP: 207.7.154.140
-  Identifier: daily_91234b56-bb19-4a38-9ec3-8b3e84c95c11.wmv
+  Identifier: testcamera01
   InternalIP: localhost
   Name: ".gem Test Camera"
 
