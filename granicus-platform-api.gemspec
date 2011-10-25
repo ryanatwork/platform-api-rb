@@ -21,9 +21,9 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('rspec', '~> 2.6')
   s.add_development_dependency('simplecov', '~> 0.4.0')
-  s.add_development_dependency('hashie', '~> 1.0.0')
+  s.add_development_dependency('hashie', '~> 1.2.0')
   s.add_development_dependency('savon', '~> 0.9.2')
 
   s.add_dependency('savon', '~> 0.9.2')
-  s.add_dependency('hashie', '~> 1.0.0')
+  s.add_dependency('hashie', '~> 1.2.0')
 end
