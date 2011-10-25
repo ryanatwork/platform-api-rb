@@ -5,7 +5,7 @@ module GranicusPlatformAPI
     property :Department
     property :Actions
   end
-  
+
   class Attendee < Hashie::Dash
     property :ID
     property :Name
@@ -13,12 +13,12 @@ module GranicusPlatformAPI
     property :Voting
     property :Chair
   end
-  
+
   class AttendeeStatus < Hashie::Dash
     property :Name
     property :Status
   end
-  
+
   class CameraData < Hashie::Dash
     property :ID
     property :Type
@@ -29,12 +29,12 @@ module GranicusPlatformAPI
     property :ControlPort
     property :Identifier
   end
-  
+
   class CaptionData < Hashie::Dash
     property :Caption
     property :TimeStamp
   end
-  
+
   class ClipData < Hashie::Dash
     property :ID
     property :UID
@@ -65,14 +65,14 @@ module GranicusPlatformAPI
     property :AgendaTitle
     property :AgendaPostedDate
   end
-  
+
   class Document < Hashie::Dash
     property :Description
     property :Location
     property :FileContents
     property :FileExtension
   end
-  
+
   class EventData < Hashie::Dash
     property :ID
     property :UID
@@ -106,7 +106,7 @@ module GranicusPlatformAPI
     property :ECommentEnabled
     property :ECommentCloseOffset
   end
-  
+
   class FolderData < Hashie::Dash
     property :ID
     property :Name
@@ -124,12 +124,12 @@ module GranicusPlatformAPI
     property :Description
     property :CreatedDate
   end
-  
+
   class KeyMapping < Hashie::Dash
     property :ForeignID
     property :GranicusID
   end
-  
+
   class MetaDataData < Hashie::Dash
     property :ID
     property :UID
@@ -166,17 +166,17 @@ module GranicusPlatformAPI
     property :Type
     property :MotionText
   end
-  
+
   class Note < Hashie::Dash
     property :NoteText
     property :EditorsNotes
     property :Private
   end
-  
+
   class Rollcall < Hashie::Dash
     property :Attendees
   end
-  
+
   class ServerData < Hashie::Dash
     property :ID
     property :Name
@@ -188,7 +188,7 @@ module GranicusPlatformAPI
     property :ReplicationPW
     property :CreatedDate
   end
-  
+
   class ServerInterfaceData < Hashie::Dash
     property :ID
     property :ServerID
@@ -204,7 +204,7 @@ module GranicusPlatformAPI
     property :Name
     property :Value
   end
-  
+
   class TemplateData < Hashie::Dash
     property :ID
     property :Name
@@ -213,7 +213,7 @@ module GranicusPlatformAPI
     property :LastModified
     property :CreatedDate
   end
-  
+
   class ViewData < Hashie::Dash
     property :ID
     property :ForeignID
@@ -222,12 +222,12 @@ module GranicusPlatformAPI
     property :Events
     property :Folders
   end
-  
+
   class VoteEntry < Hashie::Dash
     property :Name
     property :Vote
   end
-  
+
   class VoteRecord < Hashie::Dash
     property :MotionID
     property :Passed

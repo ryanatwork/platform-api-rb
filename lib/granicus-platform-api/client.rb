@@ -7,7 +7,7 @@ module GranicusPlatformAPI
 
     # mappings between soap types and our complex types
     # this area should be rewritten to auto-generate data sets properly
-    # and refactored to separate standard xsd types from custom types in class 
+    # and refactored to separate standard xsd types from custom types in class
     # map
     def self.typegenerators
       @@typegenerators
@@ -261,7 +261,7 @@ module GranicusPlatformAPI
     end
 
     # import metadata for a clip
-    # ImportClipMetaData Method (ClipID, MetaData, ClearExisting, AsTree) 
+    # ImportClipMetaData Method (ClipID, MetaData, ClearExisting, AsTree)
     def import_clip_meta_data(clip_id, meta_data, clear_existing=true, as_tree=true)
       call_soap_method(:import_clip_meta_data, '//ns5:ImportClipMetaDataResponse/KeyTable', {
           'ClipID'        => clip_id,
@@ -287,7 +287,7 @@ module GranicusPlatformAPI
       call_soap_method(:get_meta_data, '//ns5:GetMetaDataResponse/MetaData', {'MetaDataID' => meta_id})
     end
 
-    # update metadata 
+    # update metadata
     def update_meta_data(meta_data)
       call_soap_method(:update_meta_data, '//ns4:UpdateMetaDataResponse', {'MetaData' => meta_data})
     end
